@@ -1,0 +1,16 @@
+@media (max-width: 1270px) {
+	// #root > div {
+	// 	width: fit-content;
+	// }
+
+	#channelModal > div {
+		max-width: 760px;
+	}
+
+	.create-mapping,
+	.create-calendar {
+		.form-control {
+			width: 250px;
+		}
+	}
+}

@@ -1,0 +1,62 @@
+.inner-container {
+	width: 100%;
+	height: 100vh;
+}
+
+.current {
+	border-bottom: 2px solid red;
+}
+
+.list-group-item:hover {
+	background: #bbbaba;
+	transition: ease 0.13s all;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+.modal {
+	background: rgba(0, 0, 0, 0.7);
+}
+
+.calendar-info-1,
+.calendar-info-2 {
+	.list-group-item:hover {
+		background: #f1f1f1;
+		cursor: default;
+	}
+}
+
+// #channelModal > div {
+// 	max-width: 900px;
+// }
+
+// .create-mapping,
+// .create-calendar {
+// 	.d-flex {
+// 		justify-content: space-evenly;
+// 		padding: 0 1.2rem;
+// 	}
+
+// 	.form-control {
+// 		width: 300px;
+// 		min-width: 200px;
+// 	}
+// }
+
+// #channelModal > div > div > div.modal-body > form > div {
+// 	justify-content: space-between;
+// 	align-items: center;
+// 	padding: 0 2rem;
+
+// 	.form-group {
+// 		width: 200%;
+// 		min-width: 10%;
+// 	}
+// }
+
+// @import 'tablet';
+@import 'smallerScreen';
+@import 'tablet';
+@import 'mobile';
