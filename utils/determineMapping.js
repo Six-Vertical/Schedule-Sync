@@ -2,7 +2,7 @@ const Mapping = require('../models/Mapping');
 
 const determineMapping = async (aptTypeID) => {
 	try {
-		const mapping = await Mapping.findOne({appointmentType1: aptTypeID});
+		const mapping = await Mapping.findOne({appointmentType1: aptTypeID}).populate({path: 'endpoint1 account1 endpoint2 account2'});
 
 		const info = {
 			userId2: mapping.endpoint2.userId,

@@ -192,31 +192,7 @@ router.post(`/appointments/create`, async (req, res) => {
 	console.log(req.body, 'REQ.BODY'.america.bold);
 	console.log(req.headers, 'REQ.HEADERS'.green.bold);
 
-	// const mapping = await Mapping.findOne({appointmentType1: req.body.appointmentTypeID});
-
-	// const info = {
-	// 	userId2: mapping.endpoint2.userId,
-	// 	apiKey2: mapping.endpoint2.apiKey
-	// };
-
-	// let mapKey = mapping._id;
-
-	// switch (mapKey) {
-	// 	case '607883220268d225705304c9':
-	// 		return {
-	// 			...info,
-	// 			type2: mapping.appointmentType2
-	// 		};
-	// 	case '607883bad4fddd6d4074cf90':
-	// 		return {
-	// 			...info,
-	// 			type2: mapping.appointmentType2
-	// 		};
-	// }
-
-	let mappingKey = await determineMapping(req.body.appointmentTypeID);
-
-	console.log({mappingKey});
+	const mappingKey = await determineMapping(req.body.appointmentTypeID);
 
 	try {
 		acuity.request(
