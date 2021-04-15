@@ -206,7 +206,7 @@ router.post(`/appointments/create`, async (req, res) => {
 					firstName: apt.firstName,
 					lastName: apt.lastName,
 					email: apt.email,
-					appointmentTypeID: 21637194,
+					appointmentTypeID: 21637344,
 					datetime: apt.datetime,
 					fields: [
 						{
