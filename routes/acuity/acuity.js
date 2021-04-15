@@ -194,6 +194,7 @@ router.post(`/appointments/create`, async (req, res) => {
 
 	const mappingKey = await determineMapping(req.body.appointmentTypeID);
 
+	console.log(mappingKey);
 	console.log({mappingKey});
 
 	try {
