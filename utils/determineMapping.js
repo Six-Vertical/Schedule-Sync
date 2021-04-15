@@ -11,6 +11,8 @@ const determineMapping = async (aptTypeID) => {
 
 		let mapKey = mapping._id;
 
+		console.log({mapKey});
+
 		if (mapKey === '607883220268d225705304c9') {
 			return {
 				...info,
