@@ -192,7 +192,7 @@ router.post(`/appointments/create`, async (req, res) => {
 	console.log(req.body, 'REQ.BODY'.america.bold);
 	console.log(req.headers, 'REQ.HEADERS'.green.bold);
 
-	// const mappingKey = determineMapping(req.body.appointmentTypeID, req.body.calendarID);
+	const mappingKey = determineMapping(req.body.appointmentTypeID, req.body.calendarID);
 
 	try {
 		acuity.request(
@@ -211,7 +211,7 @@ router.post(`/appointments/create`, async (req, res) => {
 					firstName: apt.firstName,
 					lastName: apt.lastName,
 					email: apt.email,
-					appointmentTypeID: 21637344,
+					appointmentTypeID: mappingKey.type2,
 					datetime: apt.datetime,
 					fields: [
 						{
@@ -227,8 +227,10 @@ router.post(`/appointments/create`, async (req, res) => {
 					headers: {'content-type': 'application/json'},
 					url: 'https://acuityscheduling.com/api/v1/appointments',
 					auth: {
-						user: process.env.ACUITY_USER_ID_DEV_2,
-						password: process.env.ACUITY_API_KEY_DEV_2
+						// user: process.env.ACUITY_USER_ID_DEV_2,
+						user: mappingKey.userId2,
+						// password: process.env.ACUITY_API_KEY_DEV_2,
+						password: mappingKey.apiKey2
 					},
 					body: JSON.stringify(data)
 				};
