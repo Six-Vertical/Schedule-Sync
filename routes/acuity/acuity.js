@@ -3,6 +3,9 @@ const router = express.Router();
 const acuity = require('../../config/acuity');
 const Acuity2 = require('acuityscheduling');
 const requesting = require('request');
+const determineMapping = require('../../utils/determineMapping');
+
+const Mapping = require('../../models/Mapping');
 
 // @route   GET /api/v1/acuity/appointments
 // @acuity  GET /appointments
@@ -189,6 +192,8 @@ router.post(`/appointments/create`, async (req, res) => {
 	console.log(req.body, 'REQ.BODY'.america.bold);
 	console.log(req.headers, 'REQ.HEADERS'.green.bold);
 
+	// const mappingKey = determineMapping(req.body.appointmentTypeID, req.body.calendarID);
+
 	try {
 		acuity.request(
 			`/appointments/${req.body.id}`,
@@ -210,7 +215,8 @@ router.post(`/appointments/create`, async (req, res) => {
 					datetime: apt.datetime,
 					fields: [
 						{
-							id: 9460741,
+							id: 9460741, //Dev2 fieldID
+							// id: 9425936, //Dev1 fieldID
 							value: apt.id
 						}
 					]
