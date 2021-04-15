@@ -7,7 +7,7 @@ const inititalState = {
 	error: null
 };
 
-export default function (state = inititalState, action) {
+function endpoint(state = inititalState, action) {
 	const {payload, type} = action;
 
 	switch (type) {
@@ -63,3 +63,5 @@ export default function (state = inititalState, action) {
 			return state;
 	}
 }
+
+export default endpoint;

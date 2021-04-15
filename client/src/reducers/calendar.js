@@ -7,7 +7,7 @@ const initialState = {
 	error: null
 };
 
-export default function (state = initialState, action) {
+function calendar(state = initialState, action) {
 	const {payload, type} = action;
 
 	switch (type) {
@@ -63,3 +63,5 @@ export default function (state = initialState, action) {
 			return state;
 	}
 }
+
+export default calendar;

@@ -16,7 +16,7 @@ const MappingDashboard = ({clearMapping, clearEndpoint, getEndpoints, getMapping
 		if (endpoints.length === 0) {
 			getEndpoints();
 		}
-	}, [getMappings, getEndpoints]);
+	}, [getMappings, getEndpoints, mappings.length, endpoints.length]);
 
 	const modalRef = useRef();
 

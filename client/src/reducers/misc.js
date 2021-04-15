@@ -11,7 +11,7 @@ const inititalState = {
 	loading: true
 };
 
-export default function (state = inititalState, action) {
+function misc(state = inititalState, action) {
 	const {payload, type} = action;
 
 	switch (type) {
@@ -51,3 +51,5 @@ export default function (state = inititalState, action) {
 			return state;
 	}
 }
+
+export default misc;

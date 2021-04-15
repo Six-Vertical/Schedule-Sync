@@ -13,7 +13,7 @@ const Dashboard = ({getAccounts, clearAccount, account: {accounts, loading}}) =>
 		if (accounts.length === 0) {
 			getAccounts();
 		}
-	}, [getAccounts]);
+	}, [getAccounts, accounts.length]);
 
 	const openModal = () => {
 		modalRef.current.openModal();

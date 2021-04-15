@@ -7,7 +7,7 @@ const initialState = {
 	error: null
 };
 
-export default function (state = initialState, action) {
+function mapping(state = initialState, action) {
 	const {payload, type} = action;
 
 	switch (type) {
@@ -64,3 +64,5 @@ export default function (state = initialState, action) {
 			return state;
 	}
 }
+
+export default mapping;

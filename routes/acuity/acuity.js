@@ -198,7 +198,7 @@ router.post(`/appointments/create`, async (req, res) => {
 			(err, rez, apt) => {
 				//SET EMAIL IF BLANK
 				if (apt.email == '') {
-					apt.email = 'rjflavin@gmail.com';
+					apt.email = 'dev1@moveamerica.us';
 				}
 
 				//SET UP DATA
@@ -206,7 +206,7 @@ router.post(`/appointments/create`, async (req, res) => {
 					firstName: apt.firstName,
 					lastName: apt.lastName,
 					email: apt.email,
-					appointmentTypeID: 21295221,
+					appointmentTypeID: 21637194,
 					datetime: apt.datetime,
 					fields: [
 						{

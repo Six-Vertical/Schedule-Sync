@@ -7,7 +7,7 @@ const initialState = {
 	user: null
 };
 
-export default function (state = initialState, action) {
+function auth(state = initialState, action) {
 	const {payload, type} = action;
 
 	switch (type) {
@@ -15,3 +15,5 @@ export default function (state = initialState, action) {
 			return state;
 	}
 }
+
+export default auth;

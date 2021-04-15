@@ -11,7 +11,7 @@ const EndpointDashboard = ({getEndpoints, clearEndpoint, endpoint: {endpoints, l
 		if (endpoints.length === 0) {
 			getEndpoints();
 		}
-	}, [getEndpoints]);
+	}, [getEndpoints, endpoints.length]);
 
 	const modalRef = useRef();
 
