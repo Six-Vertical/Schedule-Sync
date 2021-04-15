@@ -17,12 +17,12 @@ const determineMapping = async (aptTypeID) => {
 			case '607883220268d225705304c9':
 				return {
 					...info,
-					type2: mapping.appointment2
+					type2: mapping.appointmentType2
 				};
 			case '607883bad4fddd6d4074cf90':
 				return {
 					...info,
-					type2: mapping.appointment2
+					type2: mapping.appointmentType2
 				};
 			default:
 				return 'default';
