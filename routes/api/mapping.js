@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
 // @access  Admin
 router.get('/2', async (req, res) => {
 	try {
-		const mapping = await Mapping.findOne({appointmentType1: '21572963'}).populate({path: 'endpoint1 account1 endpoint2 account2'});
+		const mapping = await Mapping.findOne({appointmentType1: 21572963}).populate({path: 'endpoint1 account1 endpoint2 account2'});
 
 		if (!mapping) {
 			return res.status(404).json({success: false, mappings: `Mappings could not be found, please try again`});
