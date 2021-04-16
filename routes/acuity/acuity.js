@@ -198,7 +198,7 @@ router.post(`/appointments/create`, async (req, res) => {
 		const calMappingKey = await determineCalMapping(req.completebody.calendarID);
 
 		console.log(mappingKey);
-		console.log({mappingKey});
+		console.log({calMappingKey});
 
 		acuity.request(
 			`/appointments/${req.body.id}`,
