@@ -206,7 +206,6 @@ router.post(`/appointments/create`, async (req, res) => {
 				method: 'GET'
 			},
 			(err, rez, apt) => {
-				//SET EMAIL IF BLANK
 				if (apt.email == '') {
 					apt.email = 'dev1@moveamerica.us';
 				}
@@ -214,7 +213,6 @@ router.post(`/appointments/create`, async (req, res) => {
 				const formattedTime = apt.datetime.split('T')[1];
 				const formattedDate = apt.datetime.split('T')[0];
 
-				//SET UP DATA
 				data = {
 					firstName: apt.firstName,
 					lastName: apt.lastName,
@@ -236,9 +234,7 @@ router.post(`/appointments/create`, async (req, res) => {
 					headers: {'content-type': 'application/json'},
 					url: 'https://acuityscheduling.com/api/v1/appointments',
 					auth: {
-						// user: process.env.ACUITY_USER_ID_DEV_2,
 						user: mappingKey.userId2,
-						// password: process.env.ACUITY_API_KEY_DEV_2,
 						password: mappingKey.apiKey2
 					},
 					body: JSON.stringify(data)

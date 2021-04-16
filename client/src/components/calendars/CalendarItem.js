@@ -10,6 +10,14 @@ const CalendarItem = ({getCalendar, deleteCalendar, openModal, cal}) => {
 		openModal();
 	};
 
+	const deleteMap = () => {
+		if (window.confirm('Are you sure you want to delete this Calendar mapping? Like....really, really sure?')) {
+			deleteCalendar(cal._id);
+		} else {
+			return false;
+		}
+	};
+
 	return (
 		<tr>
 			<td>
@@ -33,7 +41,7 @@ const CalendarItem = ({getCalendar, deleteCalendar, openModal, cal}) => {
 				</button>
 			</td>
 			<td>
-				<button className='btn btn-sm btn-outline-danger' title='Delete' onClick={() => deleteCalendar(cal._id)}>
+				<button className='btn btn-sm btn-outline-danger' title='Delete' onClick={deleteMap}>
 					<i className='fas fa-trash-alt'></i>
 				</button>
 			</td>

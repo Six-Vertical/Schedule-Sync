@@ -26,6 +26,24 @@ router.get('/', async (req, res) => {
 	}
 });
 
+// @route   GET /calendars/2
+// @desc    Find calendar relationship
+// @access  Admin
+router.get('/2', async (req, res) => {
+	try {
+		const calendar = await Calendar.findOne({$or: [{calendarId1: '15484'}, {calendarId2: '5399067'}]}).populate({path: 'account1 endpoint1 account2 endpoint2'});
+
+		if (!calendar) {
+			return res.status(400).json({success: false, data: `Didnt work sorry`});
+		}
+
+		res.json({success: true, count: calendar.length, calendar});
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({success: false, data: 'Server Error'});
+	}
+});
+
 // @route   GET /calendars/:calId
 // @desc    Get all calendars
 // @access  Admin

@@ -2,7 +2,7 @@ const Calendar = require('../models/Calendar');
 
 const determineCalMapping = async (calId) => {
 	try {
-		const calendar = await Calendar.findOne({calendarId1: calId}).populate({path: 'endpoint1 account1 endpoint2 account2'});
+		const calendar = await Calendar.findOne({$or: [{calendarId1: calId}, {calendarId2: calId}]}).populate({path: 'endpoint1 account1 endpoint2 account2'});
 
 		let mapKey = String(calendar._id);
 

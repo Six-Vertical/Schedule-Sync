@@ -9,6 +9,14 @@ const MappingItem = ({ma, openModal, closeModal, getMapping, deleteMapping}) => 
 		openModal();
 	};
 
+	const deleteMap = () => {
+		if (window.confirm('Are you 100% sure?')) {
+			deleteMapping(ma._id);
+		} else {
+			return false;
+		}
+	};
+
 	return (
 		<tr>
 			<td>{ma.account1.name}</td>
@@ -32,7 +40,7 @@ const MappingItem = ({ma, openModal, closeModal, getMapping, deleteMapping}) => 
 				</button>
 			</td>
 			<td>
-				<button className='btn btn-sm btn-outline-danger' title='Delete' onClick={() => deleteMapping(ma._id)}>
+				<button className='btn btn-sm btn-outline-danger' title='Delete' onClick={deleteMap}>
 					<i className='fas fa-trash-alt'></i>
 				</button>
 			</td>
