@@ -223,13 +223,81 @@ router.post(`/appointments/create`, async (req, res) => {
 					fields: [
 						{
 							id: 9460741, //Dev2 fieldID
-							// id: 9425936, //Dev1 fieldID
 							value: apt.id
 						}
 					]
 				};
 
-				//SEND REQUEST
+				var options = {
+					headers: {'content-type': 'application/json'},
+					url: 'https://acuityscheduling.com/api/v1/appointments',
+					auth: {
+						user: mappingKey.userId2,
+						password: mappingKey.apiKey2
+					},
+					body: JSON.stringify(data)
+				};
+
+				requesting.post(options, function (err, rez, body) {
+					console.log(body);
+					if (err) {
+						console.dir(err);
+						return;
+					}
+					console.dir('status code', rez.statusCode);
+					res.status(201).json({success: true, body});
+				});
+			}
+		);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({success: false, data: 'Server Error'});
+	}
+});
+
+// @route   POST /api/v1/acuity/appointments/create/d2
+// @acuity  POST /appointments/appointments
+// @desc    Create Parent/Child Appointments - This is the route that "syncs the schedules" as they say
+// @access  Private
+router.post(`/appointments/create/d2`, async (req, res) => {
+	console.log(req.body, 'REQ.BODY'.america.bold);
+	console.log(req.headers, 'REQ.HEADERS'.green.bold);
+
+	try {
+		const mappingKey = await determineMapping(req.body.appointmentTypeID);
+		const calMappingKey = await determineCalMapping(req.body.calendarID);
+
+		console.log(mappingKey);
+		console.log({calMappingKey});
+
+		acuity.request(
+			`/appointments/${req.body.id}`,
+			{
+				method: 'GET'
+			},
+			(err, rez, apt) => {
+				if (apt.email == '') {
+					apt.email = 'dev1@moveamerica.us';
+				}
+
+				const formattedTime = apt.datetime.split('T')[1];
+				const formattedDate = apt.datetime.split('T')[0];
+
+				data = {
+					firstName: apt.firstName,
+					lastName: apt.lastName,
+					email: apt.email,
+					appointmentTypeID: mappingKey.type2,
+					calendarID: calMappingKey.calType2,
+					datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T12:00:00-0700`,
+					fields: [
+						{
+							id: 9425936, // Dev1 Sibling Field ID
+							value: apt.id
+						}
+					]
+				};
+
 				var options = {
 					headers: {'content-type': 'application/json'},
 					url: 'https://acuityscheduling.com/api/v1/appointments',

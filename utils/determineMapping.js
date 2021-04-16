@@ -9,8 +9,8 @@ const determineMapping = async (aptTypeID) => {
 		console.log({dev2Origin});
 
 		const info = {
-			userId2: mapping.endpoint2.userId,
-			apiKey2: mapping.endpoint2.apiKey
+			userId2: dev2Origin ? mapping.endpoint1.userId : mapping.endpoint2.userId,
+			apiKey2: dev2Origin ? mapping.endpoint1.apiKey : mapping.endpoint2.apiKey
 		};
 
 		let mapKey = String(mapping._id);
@@ -21,12 +21,12 @@ const determineMapping = async (aptTypeID) => {
 			case '607883220268d225705304c9':
 				return {
 					...info,
-					type2: mapping.appointmentType2
+					type2: dev2Origin ? mapping.appointmentType1 : mapping.appointmentType2
 				};
 			case '607883bad4fddd6d4074cf90':
 				return {
 					...info,
-					type2: mapping.appointmentType2
+					type2: dev2Origin ? mapping.appointmentType1 : mapping.appointmentType2
 				};
 			default:
 				return 'default';
