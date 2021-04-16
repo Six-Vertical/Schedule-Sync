@@ -4,6 +4,7 @@ const acuity = require('../../config/acuity');
 const Acuity2 = require('acuityscheduling');
 const requesting = require('request');
 const determineMapping = require('../../utils/determineMapping');
+const determineCalMapping = require('../../utils/determineCalMapping');
 
 const Mapping = require('../../models/Mapping');
 
@@ -193,6 +194,7 @@ router.post(`/appointments/create`, async (req, res) => {
 	console.log(req.headers, 'REQ.HEADERS'.green.bold);
 
 	const mappingKey = await determineMapping(req.body.appointmentTypeID);
+	const calMappingKey = await determineCalMapping(req, body.calendarID);
 
 	console.log(mappingKey);
 	console.log({mappingKey});
@@ -215,7 +217,9 @@ router.post(`/appointments/create`, async (req, res) => {
 					lastName: apt.lastName,
 					email: apt.email,
 					appointmentTypeID: mappingKey.type2,
+					calendarID: calMappingKey.calType2,
 					datetime: apt.datetime,
+					// calendarID: 'DO THIS NEXT SUCKA',
 					fields: [
 						{
 							id: 9460741, //Dev2 fieldID
