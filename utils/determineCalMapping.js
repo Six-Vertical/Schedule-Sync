@@ -9,7 +9,7 @@ const determineCalMapping = async (calId) => {
 
 		let mapKey = String(calendar._id);
 
-		console.log({mapKey});
+		console.log({calMapKey: mapKey});
 
 		switch (mapKey) {
 			case '607731dc4d8ebe4b80b68640':
