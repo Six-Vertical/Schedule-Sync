@@ -193,13 +193,13 @@ router.post(`/appointments/create`, async (req, res) => {
 	console.log(req.body, 'REQ.BODY'.america.bold);
 	console.log(req.headers, 'REQ.HEADERS'.green.bold);
 
-	const mappingKey = await determineMapping(req.body.appointmentTypeID);
-	const calMappingKey = await determineCalMapping(req, body.calendarID);
-
-	console.log(mappingKey);
-	console.log({mappingKey});
-
 	try {
+		const mappingKey = await determineMapping(req.body.appointmentTypeID);
+		const calMappingKey = await determineCalMapping(req.completebody.calendarID);
+
+		console.log(mappingKey);
+		console.log({mappingKey});
+
 		acuity.request(
 			`/appointments/${req.body.id}`,
 			{
