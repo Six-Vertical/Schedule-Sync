@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const acuity = require('../../config/acuity');
+const acuityDev2 = require('../../config/acuity2');
 const Acuity2 = require('acuityscheduling');
 const requesting = require('request');
 const determineMapping = require('../../utils/determineMapping');
@@ -270,7 +271,7 @@ router.post(`/appointments/create/d2`, async (req, res) => {
 		console.log(mappingKey);
 		console.log({calMappingKey});
 
-		acuity.request(
+		acuityDev2.request(
 			`/appointments/${req.body.id}`,
 			{
 				method: 'GET'
