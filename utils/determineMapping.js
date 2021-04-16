@@ -5,8 +5,8 @@ const determineMapping = async (aptTypeID) => {
 		const mapping = await Mapping.findOne({$or: [{appointmentType1: aptTypeID}, {appointmentType2: aptTypeID}]}).populate({path: 'endpoint1 account1 endpoint2 account2'});
 
 		const info = {
-			userId2: mapping.endpoint2.userId,
-			apiKey2: mapping.endpoint2.apiKey
+			userId2: mapping.appointmentType2 == aptTypeID ? mapping.endpoint1.userId : mapping.endpoint2.userId,
+			apiKey2: mapping.appointmentType2 == aptTypeID ? mapping.endpoint1.apiKey : mapping.endpoint2.apiKey
 		};
 
 		let mapKey = String(mapping._id);
