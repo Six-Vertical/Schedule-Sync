@@ -211,6 +211,9 @@ router.post(`/appointments/create`, async (req, res) => {
 					apt.email = 'dev1@moveamerica.us';
 				}
 
+				const formattedTime = apt.datetime.split('T')[1];
+				const formattedDate = apt.datetime.split('T')[0];
+
 				//SET UP DATA
 				data = {
 					firstName: apt.firstName,
@@ -218,8 +221,7 @@ router.post(`/appointments/create`, async (req, res) => {
 					email: apt.email,
 					appointmentTypeID: mappingKey.type2,
 					calendarID: calMappingKey.calType2,
-					datetime: apt.datetime,
-					// calendarID: 'DO THIS NEXT SUCKA',
+					datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T12:00:00-0700`,
 					fields: [
 						{
 							id: 9460741, //Dev2 fieldID
