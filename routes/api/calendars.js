@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
 // @access  Admin
 router.get('/2', async (req, res) => {
 	try {
-		const calendar = await Calendar.findOne({$or: [{calendarId1: '15484'}, {calendarId2: '5399067'}]}).populate({path: 'account1 endpoint1 account2 endpoint2'});
+		const calendar = await Calendar.findOne({$or: [{calendarId2: '5398696'}, {calendarId1: '5398696'}]}).populate({path: 'account1 endpoint1 account2 endpoint2'});
 
 		if (!calendar) {
 			return res.status(400).json({success: false, data: `Didnt work sorry`});
