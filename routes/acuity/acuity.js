@@ -195,7 +195,7 @@ router.post(`/appointments/create`, async (req, res) => {
 
 	try {
 		const mappingKey = await determineMapping(req.body.appointmentTypeID);
-		const calMappingKey = await determineCalMapping(req.completebody.calendarID);
+		const calMappingKey = await determineCalMapping(req.body.calendarID);
 
 		console.log(mappingKey);
 		console.log({calMappingKey});
