@@ -2,7 +2,7 @@ const Mapping = require('../models/Mapping');
 
 const determineMapping = async (aptTypeID) => {
 	try {
-		const mapping = await Mapping.findOne({$or: [{appointmentType1: aptTypeID}, {appointmentType1: aptTypeID}]}).populate({path: 'endpoint1 account1 endpoint2 account2'});
+		const mapping = await Mapping.findOne({$or: [{appointmentType1: aptTypeID}, {appointmentType2: aptTypeID}]}).populate({path: 'endpoint1 account1 endpoint2 account2'});
 
 		const dev2Origin = mapping.appointmentType2 == aptTypeID;
 
@@ -15,7 +15,7 @@ const determineMapping = async (aptTypeID) => {
 
 		let mapKey = String(mapping._id);
 
-		console.log({mapKey});
+		console.log({apptTypeMapKey: mapKey});
 
 		switch (mapKey) {
 			case '607883220268d225705304c9':
