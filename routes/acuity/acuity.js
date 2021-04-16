@@ -222,13 +222,12 @@ router.post(`/appointments/create`, async (req, res) => {
 					datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T12:00:00-0700`,
 					fields: [
 						{
-							id: mappingKey.siblingId,
+							id: 9460741, //Dev2 fieldID
+							// id: 9425936, //Dev1 fieldID
 							value: apt.id
 						}
 					]
 				};
-
-				console.log({userIDThing: mappingKey.userId2});
 
 				//SEND REQUEST
 				var options = {
