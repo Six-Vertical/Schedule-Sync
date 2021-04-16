@@ -15,6 +15,7 @@ const determineMapping = async (aptTypeID) => {
 		let mapKey = String(mapping._id);
 
 		console.log({mapKey});
+		console.log({siblingId});
 
 		switch (mapKey) {
 			case '607883220268d225705304c9':

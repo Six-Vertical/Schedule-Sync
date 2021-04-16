@@ -228,6 +228,8 @@ router.post(`/appointments/create`, async (req, res) => {
 					]
 				};
 
+				console.log({userIDThing: mappingKey.userId2});
+
 				//SEND REQUEST
 				var options = {
 					headers: {'content-type': 'application/json'},
