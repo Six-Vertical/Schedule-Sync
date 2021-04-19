@@ -47,4 +47,6 @@ const CalendarSchema = new mongoose.Schema({
 	}
 });
 
+CalendarSchema.index({calendarId1: 1, calendarId2: 1}, {unique: true});
+
 module.exports = mongoose.model('Calendar', CalendarSchema);

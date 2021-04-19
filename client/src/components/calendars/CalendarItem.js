@@ -27,7 +27,7 @@ const CalendarItem = ({getCalendar, deleteCalendar, openModal, cal}) => {
 			<td>{cal.endpoint1.name}</td>
 			<td>{cal.calendarId1}</td>
 			<td>
-				<i className='fas fa-long-arrow-alt-right'></i>
+				<i className='fas fa-arrows-alt-h'></i>
 			</td>
 			<td>
 				<Link to={`/calendars/2/${cal.calendarId2}`}>{cal.calendarName2}</Link>

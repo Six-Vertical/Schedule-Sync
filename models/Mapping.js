@@ -39,4 +39,6 @@ const MappingSchema = new mongoose.Schema({
 	}
 });
 
+MappingSchema.index({appointmentType1: 1, appointmentType2: 1}, {unique: true});
+
 module.exports = mongoose.model('Mapping', MappingSchema);

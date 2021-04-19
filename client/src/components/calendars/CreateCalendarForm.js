@@ -6,9 +6,9 @@ import {getAccounts} from '../../actions/account';
 import {getEndpoints, getEndpoint, clearEndpoint} from '../../actions/endpoint';
 import {miscGetCalendars} from '../../actions/misc';
 
-const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEndpoint, clearCalendar, getEndpoint, getCalendars, miscGetCalendars, getAccounts, getEndpoints, calendar: {calendar}, account: {accounts}, endpoint: {endpoints, endpoint}, misc}) => {
+const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEndpoint, clearCalendar, getEndpoint, getCalendars, miscGetCalendars, getAccounts, getEndpoints, calendar: {calendar, calendars}, account: {accounts}, endpoint: {endpoints, endpoint}, misc}) => {
 	const [formData, setFormData] = useState({
-		account1: `${localStorage.getItem('mainAcc')}`,
+		account1: '',
 		endpoint1: '',
 		calendarName1: '',
 		calendarId1: '',
@@ -67,7 +67,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 		}
 	};
 
-	const getSecondInfo = () => {
+	const getInfo = () => {
 		if (accounts.length === 0) {
 			getAccounts();
 		}
@@ -101,6 +101,15 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 		miscGetCalendars(endpoint.userId, endpoint.apiKey);
 	};
 
+	let calInUseFilter = calendars.map((item) => item.calendarId1);
+	let calInUseFilter2 = calendars.map((item) => item.calendarId2);
+	let calFilter = calInUseFilter.concat(calInUseFilter2);
+
+	let miscCalsFilter = misc.calendars.filter((miscCal) => !calFilter.includes(String(miscCal.id)));
+
+	console.log({calFilter});
+	console.log({miscCalsFilter});
+
 	return (
 		<div className='create-calendar'>
 			<div className='modal-header'>
@@ -116,13 +125,22 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 						<div style={{marginRight: '4rem'}}>
 							<div className='form-group'>
 								<label htmlFor='account1'>Account 1</label>
-								<select name='account1' disabled className='form-control' value={account1} onChange={onChange}>
-									<option value={account1}>MoveAmerica</option>
+								<select name='account1' autoFocus className='form-control' value={account1} onChange={onChange} onFocus={getInfo}>
+									<option value='Select Account Name'>Select Account Name</option>
+									{accounts.length === 0 ? (
+										<option value='Not Available'>Not Available</option>
+									) : (
+										accounts.map((acc) => (
+											<option value={acc._id} key={acc._id}>
+												{acc.name}
+											</option>
+										))
+									)}
 								</select>
 							</div>
 							<div className='form-group'>
 								<label htmlFor='endpoint1'>Endpoint 1</label>
-								<select name='endpoint1' autoFocus onFocus={getEndpoints} className='form-control' value={endpoint1} onChange={onChangeEndpoint}>
+								<select name='endpoint1' onFocus={getEndpoints} className='form-control' value={endpoint1} onChange={onChangeEndpoint}>
 									<option value='Select Endpoint Name'>Select Endpoint Name</option>
 									{endpoints.length === 0 ? (
 										<option value='Not Available'>Not Available</option>
@@ -141,10 +159,10 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 								<label htmlFor='calendarId1'>Calendar 1</label>
 								<select disabled={endpoint1 === ''} name='calendarId1' onFocus={fetchCalendarsInfo} className='form-control' value={calendarId1} onChange={onChange} onBlur={clearAll1}>
 									<option value='Select Account Name'>Select Calendar Name</option>
-									{misc.calendars.length === 0 ? (
+									{misc.calendars.length === 0 || miscCalsFilter.length === 0 ? (
 										<option value='Not Available'>Not Available</option>
 									) : (
-										misc.calendars.map((cal) => (
+										miscCalsFilter.map((cal) => (
 											<option key={cal.id} value={cal.id}>
 												{cal.name}
 											</option>
@@ -156,7 +174,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 						<div>
 							<div className='form-group'>
 								<label htmlFor='account2'>Account 2</label>
-								<select name='account2' value={account2} onChange={onChange} className='form-control' onFocus={getSecondInfo}>
+								<select name='account2' value={account2} onChange={onChange} className='form-control' onFocus={getInfo}>
 									<option value='Select Account Name'>Select Account Name</option>
 									{accounts.length === 0 ? (
 										<option value='Not Available'>Not Available</option>
@@ -190,10 +208,10 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 								<label htmlFor='calendarId2'>Calendar 2</label>
 								<select disabled={endpoint2 === ''} name='calendarId2' value={calendarId2} onChange={onChange} className='form-control' onFocus={fetchCalendarsInfo} onBlur={clearAll2}>
 									<option value='Select Calendar Name'>Select Calendar Name</option>
-									{misc.calendars.length === 0 ? (
+									{misc.calendars.length === 0 || miscCalsFilter.length === 0 ? (
 										<option value='Not Available'>Not Available</option>
 									) : (
-										misc.calendars.map((cal) => (
+										miscCalsFilter.map((cal) => (
 											<option key={cal.id} value={cal.id}>
 												{cal.name}
 											</option>

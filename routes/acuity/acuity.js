@@ -291,6 +291,7 @@ router.post(`/appointments/create/d2`, async (req, res) => {
 					appointmentTypeID: mappingKey.type2,
 					calendarID: calMappingKey.calType2,
 					datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T12:00:00-0700`,
+					notes: `This sibling appointment was created automatically with Schedule-Sync`,
 					fields: [
 						{
 							id: 9425936, // Dev1 Sibling Field ID
