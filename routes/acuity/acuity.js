@@ -8,6 +8,8 @@ const determineMapping = require('../../utils/determineMapping');
 const determineCalMapping = require('../../utils/determineCalMapping');
 
 const Mapping = require('../../models/Mapping');
+const {check, validationResult} = require('express-validator');
+const {validate} = require('../../models/Mapping');
 
 // @route   GET /api/v1/acuity/appointments
 // @acuity  GET /appointments
@@ -372,4 +374,77 @@ router.get('/calendars/:userId/:apiKey', async (req, res) => {
 	}
 });
 
+// @route   GET /blocks
+// @acuity  GET /blocks
+// @desc    Get all blocks
+// @access  Admin
+router.get('/blocks', async (req, res) => {
+	try {
+		acuityDev2.request('/blocks', {method: 'GET'}, (error, rez, blocks) => {
+			if (error) {
+				console.log(error);
+				return res.status(400).json({success: false, error});
+			}
+
+			res.json({success: true, count: blocks.length, blocks});
+		});
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({success: false, data: 'Server Error'});
+	}
+});
+
+// @route   POST /blocks
+// @acuity  POST /blocks
+// @desc    Create a block
+// @access  Admin
+router.post('/blocks', async (req, res) => {
+	console.log({headers: req.headers, body: req.body});
+	try {
+		acuityDev2.request(
+			'/blocks',
+			{
+				method: 'POST',
+				body: {
+					start: req.body.start,
+					end: req.body.end,
+					calendarID: req.body.calendarID
+				}
+			},
+			(error, rez, block) => {
+				if (error) {
+					console.log(error);
+					res.status(400).json({success: false, error});
+				}
+
+				console.log({block});
+
+				res.json({block});
+			}
+		);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({success: false, data: 'Server Error'});
+	}
+});
+
+// @route   DELETE /blocks/:blockId
+// @acuity  DELETE /blocks/:blockId
+// @desc    Delete block by ID
+// @access  Admin
+router.delete('/blocks/:blockId', async (req, res) => {
+	try {
+		acuityDev2.request(`/blocks/${req.params.blockId}`, {method: 'DELETE'}, (error, rez, block) => {
+			if (error) {
+				console.log(error);
+				res.status(400).json({success: false, error});
+			}
+
+			res.json({success: true, block});
+		});
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({success: false, data: 'Server Error'});
+	}
+});
 module.exports = router;
