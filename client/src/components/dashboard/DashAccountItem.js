@@ -9,12 +9,20 @@ const DashAccountItem = ({acc, getAccount, deleteAccount, closeModal, openModal}
 		openModal();
 	};
 
+	const updateAc = () => {
+		if (window.confirm('Are you sure you want to update this account? It might affect other areas in the application.')) {
+			fetchAccount(acc._id);
+		} else {
+			return false;
+		}
+	};
+
 	return (
 		<tr>
 			<td>{acc.name}</td>
 			<td>{acc._id}</td>
 			<td>
-				<button className='btn btn-sm btn-outline-dark' title='Edit' onClick={() => fetchAccount(acc._id)}>
+				<button className='btn btn-sm btn-outline-dark' title='Edit' onClick={updateAc}>
 					<i className='fas fa-edit'></i>
 				</button>
 			</td>

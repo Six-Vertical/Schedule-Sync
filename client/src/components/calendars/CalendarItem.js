@@ -18,6 +18,14 @@ const CalendarItem = ({getCalendar, deleteCalendar, openModal, cal}) => {
 		}
 	};
 
+	const updateMap = () => {
+		if (window.confirm('Are you sure you want to update this calendar mapping? It might affect other areas in the application.')) {
+			fetchCalendarMap(cal._id);
+		} else {
+			return false;
+		}
+	};
+
 	return (
 		<tr>
 			<td>
@@ -36,7 +44,7 @@ const CalendarItem = ({getCalendar, deleteCalendar, openModal, cal}) => {
 			<td>{cal.endpoint2.name}</td>
 			<td>{cal.calendarId2}</td>
 			<td>
-				<button className='btn btn-sm btn-outline-dark' title='Edit' onClick={() => fetchCalendarMap(cal._id)}>
+				<button className='btn btn-sm btn-outline-dark' title='Edit' onClick={updateMap}>
 					<i className='fas fa-edit'></i>
 				</button>
 			</td>

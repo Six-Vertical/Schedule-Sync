@@ -17,6 +17,14 @@ const MappingItem = ({ma, openModal, closeModal, getMapping, deleteMapping}) => 
 		}
 	};
 
+	const updateMap = () => {
+		if (window.confirm('Are you sure you want to update this appointment-type mapping? It might affect other areas in the application.')) {
+			fetchMapping(ma._id);
+		} else {
+			return false;
+		}
+	};
+
 	return (
 		<tr>
 			<td>{ma.account1.name}</td>
@@ -35,7 +43,7 @@ const MappingItem = ({ma, openModal, closeModal, getMapping, deleteMapping}) => 
 				<br />({ma.appointmentType2})
 			</td>
 			<td>
-				<button className='btn btn-sm btn-outline-dark' title='Edit' onClick={() => fetchMapping(ma._id)}>
+				<button className='btn btn-sm btn-outline-dark' title='Edit' onClick={updateMap}>
 					<i className='fas fa-edit'></i>
 				</button>
 			</td>

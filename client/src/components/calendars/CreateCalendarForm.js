@@ -221,6 +221,18 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 							</div>
 						</div>
 					</div>
+					<div className='form-check'>
+						<input type='radio' className='form-check-input' name='twoWay' value='twoWay' checked />
+						<label htmlFor='twoWay' className='form-check-label'>
+							Two-way
+						</label>
+					</div>
+					<div className='form-check'>
+						<input type='radio' className='form-check-input' name='oneWay' value='oneWay' />
+						<label htmlFor='oneWay' className='form-check-label'>
+							One-way
+						</label>
+					</div>
 					<input type='submit' value='Save Calendar Mapping' className='btn btn-primary btn-block' />
 				</form>
 				<button className='btn btn-light btn-block mt-3' onClick={closeModal}>

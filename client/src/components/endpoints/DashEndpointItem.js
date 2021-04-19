@@ -9,6 +9,14 @@ const DashEndpointItem = ({ep, openModal, getEndpoint, deleteEndpoint}) => {
 		openModal();
 	};
 
+	const updateEp = () => {
+		if (window.confirm('Are you sure you want to update this endpoint? It might affect other areas in the application.')) {
+			fetchEndpoint(ep._id);
+		} else {
+			return false;
+		}
+	};
+
 	return (
 		<tr>
 			<td>{ep.account.name}</td>
@@ -18,7 +26,7 @@ const DashEndpointItem = ({ep, openModal, getEndpoint, deleteEndpoint}) => {
 			<td>{ep.userId}</td>
 			<td>{ep.apiKey}</td>
 			<td>
-				<button className='btn btn-sm btn-outline-dark' title='Edit' onClick={() => fetchEndpoint(ep._id)}>
+				<button className='btn btn-sm btn-outline-dark' title='Edit' onClick={updateEp}>
 					<i className='fas fa-edit'></i>
 				</button>
 			</td>
