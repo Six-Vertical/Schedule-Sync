@@ -232,7 +232,7 @@ router.post(`/appointments/create`, async (req, res) => {
 
 				var options = {
 					headers: {'content-type': 'application/json'},
-					url: 'https://acuityscheduling.com/api/v1/appointments?admin=true',
+					url: 'https://acuityscheduling.com/api/v1/appointments',
 					auth: {
 						user: mappingKey.userId2,
 						password: mappingKey.apiKey2
@@ -303,7 +303,7 @@ router.post(`/appointments/create/d2`, async (req, res) => {
 
 				var options = {
 					headers: {'content-type': 'application/json'},
-					url: 'https://acuityscheduling.com/api/v1/appointments?admin=true',
+					url: 'https://acuityscheduling.com/api/v1/appointments',
 					auth: {
 						user: mappingKey.userId2,
 						password: mappingKey.apiKey2
