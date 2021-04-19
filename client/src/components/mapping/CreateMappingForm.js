@@ -6,7 +6,7 @@ import {getAccounts} from '../../actions/account';
 import {getEndpoints, getEndpoint, clearEndpoint} from '../../actions/endpoint';
 import {miscGetApptTypes, miscClearAll, isLoading} from '../../actions/misc';
 
-const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMapping, clearMapping, getMappings, closeModal, getAccounts, getEndpoints, miscGetApptTypes, account: {accounts}, mapping: {mapping}, endpoint: {endpoints, endpoint}, misc: {loading, appointmentTypes}}) => {
+const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMapping, clearMapping, getMappings, closeModal, getAccounts, getEndpoints, miscGetApptTypes, account: {accounts}, mapping: {mapping, mappings}, endpoint: {endpoints, endpoint}, misc: {loading, appointmentTypes}}) => {
 	const [formData, setFormData] = useState({
 		account1: '',
 		endpoint1: '',
@@ -97,8 +97,16 @@ const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMap
 	};
 
 	const getSecondInfo = () => {
-		getAccounts();
+		if (accounts.length === 0) {
+			getAccounts();
+		}
 	};
+
+	let aptTypeInUse = mappings.map((item) => item.appointmentType1);
+	let aptTypeInUse2 = mappings.map((item) => item.appointmentType2);
+	let aptTypeFilter = aptTypeInUse.concat(aptTypeInUse2);
+
+	let miscAptTypeFilter = appointmentTypes.filter((miscAptType) => !aptTypeFilter.includes(String(miscAptType.id)));
 
 	return (
 		<div className='create-mapping'>
@@ -152,7 +160,7 @@ const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMap
 									{loading ? (
 										<option>Loading...</option>
 									) : (
-										appointmentTypes.map((app) => (
+										miscAptTypeFilter.map((app) => (
 											<option key={app.id} value={app.id}>
 												{app.name}
 											</option>
