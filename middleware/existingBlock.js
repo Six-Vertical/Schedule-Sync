@@ -1,20 +1,20 @@
 const acuity = require('../config/acuity');
 
-const existingBlock = async () => {
+const existingBlock = async (req, res, next) => {
 	try {
-		const answer = acuity.request('/blocks', {method: 'GET'}, async (error, rez, blocks) => {
+		acuity.request('/blocks', {method: 'GET'}, async (error, rez, blocks) => {
 			if (error) {
 				console.error(err);
 			}
 			// console.log({rez});
+			// console.log({req, res});
 
-			return blocks;
+			req.existing = blocks;
+			next();
 		});
 	} catch (err) {
 		console.error(err);
 	}
 };
-
-console.log(existingBlock());
 
 module.exports = existingBlock;

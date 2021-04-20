@@ -8,10 +8,7 @@ const determineMapping = require('../../utils/determineMapping');
 const determineCalMapping = require('../../utils/determineCalMapping');
 const determineBlockMapping = require('../../utils/determineBlockMapping');
 const createMultipleBlocks = require('../../utils/createMultipleBlocks');
-
-const Block = require('../../models/Block');
-const {check, validationResult} = require('express-validator');
-const {validate} = require('../../models/Mapping');
+const existingBlock = require('../../middleware/existingBlock');
 
 // @route   GET /api/v1/acuity/appointments
 // @acuity  GET /appointments
@@ -380,13 +377,49 @@ router.get('/calendars/:userId/:apiKey', async (req, res) => {
 // @acuity  GET /blocks
 // @desc    Get all blocks
 // @access  Admin
-router.get('/blocks', async (req, res) => {
+router.get('/blocks', existingBlock, async (req, res) => {
 	try {
-		acuityDev2.request('/blocks', {method: 'GET'}, (error, rez, blocks) => {
+		acuityDev2.request('/blocks', {method: 'GET'}, async (error, rez, blocks) => {
+			requesting.get('http://localhost:5000/api/v1/acuity/blocks/ma', {method: 'GET'}, (ee, rr, bod) => {
+				if (ee) {
+					console.log(ee);
+				}
+
+				console.log({bod});
+			});
+
 			if (error) {
 				console.log(error);
 				res.status(400).json({success: false, error});
 			}
+
+			const alreadyExists = blocks.filter((bl) => bl.end === '2021-04-24T11:15:00-0700');
+
+			console.log({alreadyExists, count: alreadyExists.length});
+
+			res.json({success: true, count: blocks.length, blocks});
+		});
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({success: false, data: 'Server Error'});
+	}
+});
+
+// @route   GET /blocks/ma
+// @acuity  GET /blocks
+// @desc    Get all blocks
+// @access  Admin
+router.get('/blocks/ma', existingBlock, async (req, res) => {
+	try {
+		acuity.request('/blocks', {method: 'GET'}, async (error, rez, blocks) => {
+			if (error) {
+				console.log(error);
+				res.status(400).json({success: false, error});
+			}
+
+			const alreadyExists = blocks.filter((bl) => bl.end === '2021-04-24T11:15:00-0700');
+
+			console.log({alreadyExists, count: alreadyExists.length});
 
 			res.json({success: true, count: blocks.length, blocks});
 		});
@@ -409,6 +442,8 @@ router.post('/blocks/main', async (req, res) => {
 				console.log(error);
 				return res.status(400).json({success: false, error});
 			}
+
+			//** SEARCH FOR ALREADY EXISTING **\\
 
 			const endData = createMultipleBlocks(blocks);
 
