@@ -8,7 +8,9 @@ const determineMapping = require('../../utils/determineMapping');
 const determineCalMapping = require('../../utils/determineCalMapping');
 const determineBlockMapping = require('../../utils/determineBlockMapping');
 const createMultipleBlocks = require('../../utils/createMultipleBlocks');
-const existingBlock = require('../../middleware/existingBlock');
+const existingBlock = require('../../utils/existingBlock');
+const existingBlockMiddleware = require('../../middleware/existingBlock');
+const fetch = require('node-fetch');
 
 // @route   GET /api/v1/acuity/appointments
 // @acuity  GET /appointments
@@ -377,25 +379,19 @@ router.get('/calendars/:userId/:apiKey', async (req, res) => {
 // @acuity  GET /blocks
 // @desc    Get all blocks
 // @access  Admin
-router.get('/blocks', existingBlock, async (req, res) => {
+router.get('/blocks', async (req, res) => {
 	try {
 		acuityDev2.request('/blocks', {method: 'GET'}, async (error, rez, blocks) => {
-			requesting.get('http://localhost:5000/api/v1/acuity/blocks/ma', {method: 'GET'}, (ee, rr, bod) => {
-				if (ee) {
-					console.log(ee);
-				}
-
-				console.log({bod});
-			});
-
 			if (error) {
 				console.log(error);
 				res.status(400).json({success: false, error});
 			}
 
+			existingBlock();
+
 			const alreadyExists = blocks.filter((bl) => bl.end === '2021-04-24T11:15:00-0700');
 
-			console.log({alreadyExists, count: alreadyExists.length});
+			console.log({alreadyExists});
 
 			res.json({success: true, count: blocks.length, blocks});
 		});
@@ -407,9 +403,9 @@ router.get('/blocks', existingBlock, async (req, res) => {
 
 // @route   GET /blocks/ma
 // @acuity  GET /blocks
-// @desc    Get all blocks
+// @desc    Get all MA blocks
 // @access  Admin
-router.get('/blocks/ma', existingBlock, async (req, res) => {
+router.get('/blocks/ma', async (req, res) => {
 	try {
 		acuity.request('/blocks', {method: 'GET'}, async (error, rez, blocks) => {
 			if (error) {
@@ -417,11 +413,49 @@ router.get('/blocks/ma', existingBlock, async (req, res) => {
 				res.status(400).json({success: false, error});
 			}
 
-			const alreadyExists = blocks.filter((bl) => bl.end === '2021-04-24T11:15:00-0700');
-
-			console.log({alreadyExists, count: alreadyExists.length});
+			console.log({blocks});
 
 			res.json({success: true, count: blocks.length, blocks});
+		});
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({success: false, data: 'Server Error'});
+	}
+});
+
+// @route   GET /blocks/single/:blockID
+// @acuity  GET /blocks/:id
+// @desc    Get block by ID
+// @access  Admin
+router.get('/blocks/single/:blockID', async (req, res) => {
+	try {
+		acuityDev2.request(`/blocks/${req.params.blockID}`, {method: 'GET'}, async (error, rez, block) => {
+			if (error) {
+				console.log(error);
+				res.status(400).json({success: false, error});
+			}
+
+			res.json({success: true, block});
+		});
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({success: false, data: 'Server Error'});
+	}
+});
+
+// @route   GET /blocks/single/ma/:blockID
+// @acuity  GET /blocks/:id
+// @desc    Get block by ID
+// @access  Admin
+router.get('/blocks/single/ma/:blockID', async (req, res) => {
+	try {
+		acuity.request(`/blocks/${req.params.blockID}`, {method: 'GET'}, async (error, rez, block) => {
+			if (error) {
+				console.log(error);
+				res.status(400).json({success: false, error});
+			}
+
+			res.json({success: true, block});
 		});
 	} catch (err) {
 		console.error(err);
@@ -445,9 +479,9 @@ router.post('/blocks/main', async (req, res) => {
 
 			//** SEARCH FOR ALREADY EXISTING **\\
 
-			const endData = createMultipleBlocks(blocks);
+			createMultipleBlocks(blocks);
 
-			res.json({success: true, blocks: 'All blocks from Dev2 have been synced to Dev1'});
+			res.status(201).json({success: true, blocks: 'All blocks from Dev2 have been synced to Dev1'});
 		});
 	} catch (err) {
 		console.error(err);
@@ -516,7 +550,8 @@ router.post('/blocks', async (req, res) => {
 				body: {
 					start: req.body.start,
 					end: req.body.end,
-					calendarID: req.body.calendarID
+					calendarID: req.body.calendarID,
+					notes: req.body.notes
 				}
 			},
 			(error, rez, block) => {

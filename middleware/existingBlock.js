@@ -1,17 +1,22 @@
-const acuity = require('../config/acuity');
+const request = require('request');
+const fetch = require('node-fetch');
 
 const existingBlock = async (req, res, next) => {
 	try {
-		acuity.request('/blocks', {method: 'GET'}, async (error, rez, blocks) => {
+		request.get('http://localhost:5000/api/v1/acuity/blocks/ma', {method: 'GET'}, (error, rez, blocks) => {
 			if (error) {
-				console.error(err);
+				console.log(error);
+				return;
 			}
-			// console.log({rez});
-			// console.log({req, res});
 
-			req.existing = blocks;
+			blocks.map((b) => b.id);
+
+			req.maBlocks = blocks;
 			next();
 		});
+
+		req.something = 'Hey will, this middleware is working..... :)';
+		next();
 	} catch (err) {
 		console.error(err);
 	}

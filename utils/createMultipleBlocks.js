@@ -1,11 +1,14 @@
 const determineBlockMapping = require('./determineBlockMapping');
 const requesting = require('request');
+const filterBlock = require('./filterBlock');
 
 const createMultipleBlocks = async (blocksData) => {
 	await Promise.all(
 		blocksData.map(async (block) => {
 			try {
-				console.log({block});
+				const blockPassed = filterBlock(block);
+
+				console.log({block: block.id, desc: block.description, blockPassed});
 				const blockMappingKey = determineBlockMapping(block.calendarID);
 
 				data = {
