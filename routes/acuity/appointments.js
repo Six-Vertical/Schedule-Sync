@@ -201,25 +201,33 @@ router.post('/delete', async (req, res) => {
 	console.log({headers: req.headers, body: req.body});
 
 	try {
-		// acuity.request(`/appointments/${req.body.id}`, {method: 'GET'}, (error, rez, apt) => {
-		// 	const options = {
-		// 		method: 'PUT',
-		// 		url: `https://acuityscheduling.com/api/v1/appointments/$${req.body.id}/cancel?admin=true`,
-		// 		auth: {
-		// 			user: process.env.ACUITY_USER_ID_DEV_2,
-		// 			password: process.env.ACUITY_API_KEY_DEV_2
-		// 		}
-		// 	};
+		acuity.request(`/appointments/${req.body.id}`, {method: 'GET'}, (error, rez, apt) => {
+			const dev1OriginCheck = apt.forms.find((form) => form.id === 1701777).values.find((f) => f.fieldID === 9425936).value;
 
-		// 	requesting.put(options, (e, rezult, body) => {
-		// 		if (e) {
-		// 			console.log(e);
-		// 			return;
-		// 		}
+			if (dev1OriginCheck === '') {
+				// Dev1 is the parent appointment
+			} else {
+				// Dev1 is the child appoiinyment
+			}
 
-		// 		res.json({success: true, body});
-		// 	});
-		// });
+			const options = {
+				method: 'PUT',
+				url: `https://acuityscheduling.com/api/v1/appointments/$${req.body.id}/cancel?admin=true`,
+				auth: {
+					user: process.env.ACUITY_USER_ID_DEV_2,
+					password: process.env.ACUITY_API_KEY_DEV_2
+				}
+			};
+
+			requesting.put(options, (e, rezult, body) => {
+				if (e) {
+					console.log(e);
+					return;
+				}
+
+				res.json({success: true, body});
+			});
+		});
 		res.json({success: true, data: 'hey Will'});
 	} catch (err) {
 		console.error(err);
