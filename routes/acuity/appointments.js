@@ -197,4 +197,34 @@ router.post(`/create/d2`, async (req, res) => {
 	}
 });
 
+router.post('/delete', async (req, res) => {
+	console.log({headers: req.headers, body: req.body});
+
+	try {
+		// acuity.request(`/appointments/${req.body.id}`, {method: 'GET'}, (error, rez, apt) => {
+		// 	const options = {
+		// 		method: 'PUT',
+		// 		url: `https://acuityscheduling.com/api/v1/appointments/$${req.body.id}/cancel?admin=true`,
+		// 		auth: {
+		// 			user: process.env.ACUITY_USER_ID_DEV_2,
+		// 			password: process.env.ACUITY_API_KEY_DEV_2
+		// 		}
+		// 	};
+
+		// 	requesting.put(options, (e, rezult, body) => {
+		// 		if (e) {
+		// 			console.log(e);
+		// 			return;
+		// 		}
+
+		// 		res.json({success: true, body});
+		// 	});
+		// });
+		res.json({success: true, data: 'hey Will'});
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({success: false, data: 'Server Error'});
+	}
+});
+
 module.exports = router;
