@@ -133,7 +133,6 @@ router.post(`/create`, async (req, res) => {
 
 				requesting.get(options2, (e, r, b) => {
 					console.log({b});
-					appointments;
 					const sibId = b[0].forms.find((form) => form.id === 1708418).values.find((val) => val.fieldID == 9460741).value;
 
 					console.log({sibId});
