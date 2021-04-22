@@ -96,10 +96,12 @@ router.post(`/create`, async (req, res) => {
 					fields: [
 						{
 							id: 9460741, //Dev2 fieldID
-							value: apt.id
+							value: req.body.id
 						}
 					]
 				};
+
+				console.log({reqBodyID: req.body.id, aptId: apt.id});
 
 				var options = {
 					headers: {'content-type': 'application/json'},
