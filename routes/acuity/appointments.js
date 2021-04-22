@@ -12,7 +12,7 @@ const determineCalMapping = require('../../utils/determineCalMapping');
 // @access  Admin
 router.get('/', async (req, res) => {
 	try {
-		acuityDev2.request(`/appointments?field:9460741=578034326`, (error, rez, appointments) => {
+		acuity.request(`/appointments`, (error, rez, appointments) => {
 			if (error) console.error(error);
 			res.json({success: true, count: appointments.length, appointments});
 		});
@@ -121,15 +121,11 @@ router.post(`/create`, async (req, res) => {
 					console.log(typeof body);
 					console.log(typeof JSON.parse(body));
 					console.log({realBody: body});
-					console.log({updatedBody: updatedBody.id});
 					if (err) {
 						console.dir(err);
 						return;
 					}
 					console.dir('status code', rez.statusCode);
-					// res.status(201).json({success: true, body});
-
-					// PUT /appointments/${body.id} DEV1
 
 					// Dev1 - #3
 					const data2 = {
@@ -152,9 +148,6 @@ router.post(`/create`, async (req, res) => {
 					};
 
 					requesting.put(options2, function (x, y, z) {
-						console.log({typeOfZ: typeof z});
-						console.log({z});
-
 						if (x) {
 							console.log({x});
 							return;
@@ -186,6 +179,7 @@ router.post(`/create/d2`, async (req, res) => {
 		console.log(mappingKey);
 		console.log({calMappingKey});
 
+		// Dev2 - #1
 		acuityDev2.request(
 			`/appointments/${req.body.id}`,
 			{
@@ -199,6 +193,7 @@ router.post(`/create/d2`, async (req, res) => {
 				const formattedTime = apt.datetime.split('T')[1];
 				const formattedDate = apt.datetime.split('T')[0];
 
+				// Dev1 - #2
 				data = {
 					firstName: apt.firstName,
 					lastName: apt.lastName,
@@ -226,13 +221,42 @@ router.post(`/create/d2`, async (req, res) => {
 				};
 
 				requesting.post(options, function (err, rez, body) {
-					console.log(body);
+					const updatedBody = JSON.parse(body);
+					console.log({updatedBody});
 					if (err) {
 						console.dir(err);
 						return;
 					}
 					console.dir('status code', rez.statusCode);
-					res.status(201).json({success: true, body});
+
+					// Dev2 - #3
+					const data2 = {
+						fields: [
+							{
+								id: 9460741, // Dev2 Field ID
+								value: updatedBody.id
+							}
+						]
+					};
+
+					const options2 = {
+						headers: {'content-type': 'application/json'},
+						url: `https://acuityscheduling.com/api/v1/appointments/${apt.id}`,
+						auth: {
+							user: process.env.ACUITY_USER_ID_DEV_2,
+							password: process.env.ACUITY_API_KEY_DEV_2
+						},
+						body: JSON.stringify(data2)
+					};
+
+					requesting.put(options2, function (x, y, z) {
+						if (x) {
+							console.log({x});
+							return;
+						}
+
+						res.status(200).json({success: true, body: z});
+					});
 				});
 			}
 		);
