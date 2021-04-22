@@ -103,8 +103,6 @@ router.post(`/create`, async (req, res) => {
 					]
 				};
 
-				console.log({reqBodyID: req.body.id, aptId: apt.id});
-
 				var options = {
 					headers: {'content-type': 'application/json'},
 					url: 'https://acuityscheduling.com/api/v1/appointments',
@@ -116,63 +114,49 @@ router.post(`/create`, async (req, res) => {
 				};
 
 				requesting.post(options, function (err, rez, body) {
-					console.log(body);
+					console.log({reqBodyID: req.body.id, aptId: apt.id, bodyId: body.id});
+
+					console.log({body});
 					if (err) {
 						console.dir(err);
 						return;
 					}
 					console.dir('status code', rez.statusCode);
-					res.status(201).json({success: true, body});
+					// res.status(201).json({success: true, body});
+
+					// PUT /appointments/${body.id} DEV1
+
+					// Dev1 - #3
+					const data2 = {
+						fields: [
+							{
+								id: 9425936, // Dev1 Field ID
+								value: body.id
+							}
+						]
+					};
+
+					const options2 = {
+						headers: {'content-type': 'application/json'},
+						url: `https://acuityscheduling.com/api/v1/appointments/${apt.id}`,
+						auth: {
+							user: process.env.ACUITY_USER_ID_DEV_1,
+							password: process.env.ACUITY_API_KEY_DEV_1
+						},
+						body: JSON.stringify(data2)
+					};
+
+					requesting.put(options2, (x, y, z) => {
+						console.log({z});
+
+						if (x) {
+							console.log({x});
+							return;
+						}
+
+						res.status(200).json({success: true, body: z});
+					});
 				});
-
-				// Dev 2 - #3
-				// // const options2 = {
-				// // 	url: `https://acuityscheduling.com/api/v1/appointments?field:9460741=${apt.id}`,
-				// // 	auth: {
-				// // 		user: process.env.ACUITY_USER_ID_DEV_2,
-				// // 		password: process.env.ACUITY_API_KEY_DEV_2
-				// // 	}
-				// // };
-
-				// // requesting.get(options2, async (e, r, b) => {
-				// // 	console.log({b});
-				// // 	const sibId = await b.forms.find((form) => form.id === 1708418).values.find((val) => val.fieldID == 9460741).value;
-
-				// // 	console.log({sibId});
-
-				// // 	if (e) {
-				// // 		console.error(e);
-				// // 		return;
-				// // 	}
-
-				// // 	const data2 = {
-				// // 		fields: [
-				// // 			{
-				// // 				id: 9425936,
-				// // 				value: sibId
-				// // 			}
-				// // 		]
-				// // 	};
-
-				// // 	// Dev 1 - #4
-				// // 	const options3 = {
-				// // 		url: `https://acuityscheduling.com/api/v1/appointments/${sibId}`,
-				// // 		auth: {
-				// // 			user: process.env.ACUITY_USER_ID_DEV_1,
-				// // 			password: process.env.ACUITY_API_KEY_DEV_1
-				// // 		},
-				// // 		body: JSON.stringify(data2)
-				// // 	};
-
-				// // 	requesting.put(options3, (x, y, z) => {
-				// // 		if (x) {
-				// // 			console.log({x});
-				// // 			return;
-				// // 		}
-
-				// // 		res.json({success: true, body: z});
-				// // 	});
-				// });
 			}
 		);
 	} catch (err) {
