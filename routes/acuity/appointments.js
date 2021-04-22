@@ -12,7 +12,7 @@ const determineCalMapping = require('../../utils/determineCalMapping');
 // @access  Admin
 router.get('/', async (req, res) => {
 	try {
-		acuity.request(`/appointments`, (error, rez, appointments) => {
+		acuityDev2.request(`/appointments?field:9460741=578034326`, (error, rez, appointments) => {
 			if (error) console.error(error);
 			res.json({success: true, count: appointments.length, appointments});
 		});
@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
 // @access  Admin
 router.get('/:aptId', async (req, res) => {
 	try {
-		acuityDev2.request(`/appointments/${req.params.aptId}`, (error, rez, appointment) => {
+		acuity.request(`/appointments/${req.params.aptId}`, (error, rez, appointment) => {
 			if (error) console.error(error);
 			res.json({success: true, appointment});
 		});
@@ -133,7 +133,8 @@ router.post(`/create`, async (req, res) => {
 
 				requesting.get(options2, (e, r, b) => {
 					console.log({b});
-					const sibId = b.appointments[0].id;
+					appointments;
+					const sibId = b[0].forms.find((form) => form.id === 1708418).values.find((val) => val.fieldID == 9460741).value;
 
 					console.log({sibId});
 
