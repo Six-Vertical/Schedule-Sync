@@ -116,9 +116,12 @@ router.post(`/create`, async (req, res) => {
 				requesting.post(options, function (err, rez, body) {
 					console.log({reqBodyID: req.body.id, aptId: apt.id, bodyId: body.id});
 
+					const updatedBody = JSON.parse(body);
+
 					console.log(typeof body);
 					console.log(typeof JSON.parse(body));
 					console.log({realBody: body});
+					console.log({updatedBody: updatedBody.id});
 					if (err) {
 						console.dir(err);
 						return;
@@ -133,7 +136,7 @@ router.post(`/create`, async (req, res) => {
 						fields: [
 							{
 								id: 9425936, // Dev1 Field ID
-								value: body.id
+								value: updatedBody.id
 							}
 						]
 					};
@@ -149,6 +152,7 @@ router.post(`/create`, async (req, res) => {
 					};
 
 					requesting.put(options2, function (x, y, z) {
+						console.log({typeOfZ: typeof z});
 						console.log({z});
 
 						if (x) {
@@ -242,7 +246,7 @@ router.post(`/create/d2`, async (req, res) => {
 
 // @route   POST /api/v1/acuity/appointments/cancel
 // @acuity  PUT /appointments/:aptID/cancel
-// @desc    Create Parent/Child Appointments - This is the route that "syncs the schedules" as they say
+// @desc    Cancel sibling appointment ** Dev1 => Dev2 **
 // @access  Private
 router.post('/cancel', async (req, res) => {
 	console.log({headers: req.headers, body: req.body});
@@ -330,6 +334,19 @@ router.post('/cancel', async (req, res) => {
 	}
 });
 
+// @route   POST /api/v1/acuity/appointments/cancel/d2
+// @acuity  PUT /appointments/:aptID/cancel
+// @desc    Cancel sibling appointment ** Dev2 => Dev1 **
+// @access  Admin
+router.post('/cancel/d2', async (req, res) => {
+	try {
+		res.send('Index');
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({success: false, data: 'Server Error'});
+	}
+});
+
 //////////////////////////////////////// RESCHEDULE //////////////////////////////////
 
 // @route   POST /api/v1/acuity/appointments/reschedule
@@ -368,6 +385,19 @@ router.post('/reschedule', async (req, res) => {
 				console.log({b});
 			});
 		});
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({success: false, data: 'Server Error'});
+	}
+});
+
+// @route   POST /api/v1/acuity/appointments/reschedule/d2
+// @acuity  PUT /appointments/:aptID/reschedule
+// @desc    Reschedule sibling appointment ** Dev2 => Dev1 **
+// @access  Admin
+router.post('/reschedule/d2', async (req, res) => {
+	try {
+		res.send('Index');
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({success: false, data: 'Server Error'});
