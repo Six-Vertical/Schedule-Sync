@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
 // @access  Admin
 router.get('/:aptId', async (req, res) => {
 	try {
-		acuity.request(`/appointments/${req.params.aptId}`, (error, rez, appointment) => {
+		acuityDev2.request(`/appointments/${req.params.aptId}`, (error, rez, appointment) => {
 			if (error) console.error(error);
 			res.json({success: true, appointment});
 		});
@@ -122,7 +122,7 @@ router.post(`/create`, async (req, res) => {
 
 				// Dev 2 - #3
 				const options2 = {
-					url: `https://acuityscheduling.com/api/v1/appointments?field:9425936=${apt.id}`,
+					url: `https://acuityscheduling.com/api/v1/appointments?field:9460741=${apt.id}`,
 					auth: {
 						user: process.env.ACUITY_USER_ID_DEV_2,
 						password: process.env.ACUITY_API_KEY_DEV_2
@@ -143,7 +143,7 @@ router.post(`/create`, async (req, res) => {
 					const data2 = {
 						fields: [
 							{
-								id: 9460741,
+								id: 9425936,
 								value: sibId
 							}
 						]
