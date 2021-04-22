@@ -116,11 +116,9 @@ router.post(`/create`, async (req, res) => {
 				requesting.post(options, function (err, rez, body) {
 					console.log({reqBodyID: req.body.id, aptId: apt.id, bodyId: body.id});
 
-					console.log(rez);
-
 					console.log(typeof body);
 					console.log(typeof JSON.parse(body));
-					console.log(typeof body);
+					console.log({realBody: body});
 					if (err) {
 						console.dir(err);
 						return;
