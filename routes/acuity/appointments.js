@@ -116,7 +116,52 @@ router.post(`/create`, async (req, res) => {
 						return;
 					}
 					console.dir('status code', rez.statusCode);
-					res.status(201).json({success: true, body});
+				});
+
+				const options2 = {
+					url: `https://acuityscheduling.com/api/v1/appointments?field:9460741=${apt.id}`,
+					auth: {
+						user: process.env.ACUITY_USER_ID_DEV_2,
+						password: process.env.ACUITY_API_KEY_DEV_2
+					}
+				};
+
+				requesting.get(options2, (e, r, b) => {
+					const sibId = b.appointments[0].id;
+
+					console.log({sibId});
+
+					if (e) {
+						console.error(e);
+						return;
+					}
+
+					const data2 = {
+						fields: [
+							{
+								id: 9425936,
+								value: sibId
+							}
+						]
+					};
+
+					const options3 = {
+						url: `https://acuityscheduling.com/api/v1/appointments/${sibId}`,
+						auth: {
+							user: process.env.ACUITY_USER_ID_DEV_1,
+							password: process.env.ACUITY_API_KEY_DEV_1
+						},
+						body: JSON.stringify(data2)
+					};
+
+					requesting.put(options3, (x, y, z) => {
+						if (x) {
+							console.log({x});
+							return;
+						}
+
+						res.json({success: true, body: z});
+					});
 				});
 			}
 		);
@@ -197,7 +242,7 @@ router.post(`/create/d2`, async (req, res) => {
 	}
 });
 
-router.post('/delete', async (req, res) => {
+router.post('/cancel', async (req, res) => {
 	console.log({headers: req.headers, body: req.body});
 
 	try {
