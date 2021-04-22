@@ -131,7 +131,7 @@ router.post(`/create`, async (req, res) => {
 						fields: [
 							{
 								id: 9425936, // Dev1 Field ID
-								value: body.id
+								value: JSON.parse(body.id)
 							}
 						]
 					};
