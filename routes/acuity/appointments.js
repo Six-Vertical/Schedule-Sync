@@ -12,7 +12,7 @@ const determineCalMapping = require('../../utils/determineCalMapping');
 // @access  Admin
 router.get('/', async (req, res) => {
 	try {
-		acuity.request(`/appointments`, (error, rez, appointments) => {
+		acuityDev2.request(`/appointments?field:9460741=575448847`, (error, rez, appointments) => {
 			if (error) console.error(error);
 			res.json({success: true, count: appointments.length, appointments});
 		});
@@ -205,9 +205,56 @@ router.post('/delete', async (req, res) => {
 			const dev1OriginCheck = apt.forms.find((form) => form.id === 1701777).values.find((f) => f.fieldID === 9425936).value;
 
 			if (dev1OriginCheck === '') {
-				// Dev1 is the parent appointment
+				// DEV1 IS PARENT
+				const options = {
+					url: `https://acuityscheduling.com/api/v1/appointments?field:9460741=${dev1OriginCheck}`,
+					auth: {
+						user: process.env.ACUITY_USER_ID_DEV_2,
+						password: process.env.ACUITY_API_KEY_DEV_2
+					}
+				};
+
+				requesting.get(options, (er, re, bo) => {
+					if (er) {
+						console.log(er);
+						return res.status(400).json({success: false, error: er});
+					}
+
+					const options2 = {
+						url: `https://acuityscheduling.com/api/v1/appointments/$${bo.appointments[0].id}/cancel?admin=true`,
+						auth: {
+							user: process.env.ACUITY_USER_ID_DEV_2,
+							password: process.env.ACUITY_API_KEY_DEV_2
+						}
+					};
+
+					requesting.put(options, (x, y, z) => {
+						if (x) {
+							console.log(x);
+							return res.status(400).json({success: false, error: x});
+						}
+
+						res.json({success: true, body: z});
+					});
+				});
 			} else {
-				// Dev1 is the child appoiinyment
+				// DEV2 IS PARENT
+				const options = {
+					url: `https://acuityscheduling.com/api/v1/appointments/$${dev1OriginCheck}/cancel?admin=true`,
+					auth: {
+						user: process.env.ACUITY_USER_ID_DEV_2,
+						password: process.env.ACUITY_API_KEY_DEV_2
+					}
+				};
+
+				requesting.put(options, (errr, rex, bod) => {
+					if (errr) {
+						console.log(errr);
+						return res.status(400).json({success: false, error: errr});
+					}
+
+					res.json({success: true, body: bod});
+				});
 			}
 
 			const options = {
