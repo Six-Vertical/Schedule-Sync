@@ -187,11 +187,13 @@ router.post(`/create/d2`, async (req, res) => {
 			},
 			(err, rez, apt) => {
 				if (apt.email == '') {
-					apt.email = 'dev1@moveamerica.us';
+					apt.email = 'dev2@moveamerica.us';
 				}
 
 				const formattedTime = apt.datetime.split('T')[1];
 				const formattedDate = apt.datetime.split('T')[0];
+
+				console.log({apt});
 
 				// Dev1 - #2
 				data = {
@@ -204,7 +206,7 @@ router.post(`/create/d2`, async (req, res) => {
 					notes: `This sibling appointment was created automatically with Schedule-Sync`,
 					fields: [
 						{
-							id: 9425936, // Dev1 Sibling Field ID
+							id: 9425936, //Dev1 fieldID
 							value: apt.id
 						}
 					]
