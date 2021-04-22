@@ -12,7 +12,7 @@ const determineCalMapping = require('../../utils/determineCalMapping');
 // @access  Admin
 router.get('/', async (req, res) => {
 	try {
-		acuityDev2.request(`/appointments?field:9460741=575448847`, (error, rez, appointments) => {
+		acuity.request(`/appointments`, (error, rez, appointments) => {
 			if (error) console.error(error);
 			res.json({success: true, count: appointments.length, appointments});
 		});
@@ -70,6 +70,7 @@ router.post(`/create`, async (req, res) => {
 		console.log(mappingKey);
 		console.log({calMappingKey});
 
+		// Dev 1 - #1
 		acuity.request(
 			`/appointments/${req.body.id}`,
 			{
@@ -83,6 +84,7 @@ router.post(`/create`, async (req, res) => {
 				const formattedTime = apt.datetime.split('T')[1];
 				const formattedDate = apt.datetime.split('T')[0];
 
+				// Dev 2 - #2
 				data = {
 					firstName: apt.firstName,
 					lastName: apt.lastName,
@@ -118,8 +120,9 @@ router.post(`/create`, async (req, res) => {
 					console.dir('status code', rez.statusCode);
 				});
 
+				// Dev 2 - #3
 				const options2 = {
-					url: `https://acuityscheduling.com/api/v1/appointments?field:9460741=${apt.id}`,
+					url: `https://acuityscheduling.com/api/v1/appointments?field:9425936=${apt.id}`,
 					auth: {
 						user: process.env.ACUITY_USER_ID_DEV_2,
 						password: process.env.ACUITY_API_KEY_DEV_2
@@ -127,6 +130,7 @@ router.post(`/create`, async (req, res) => {
 				};
 
 				requesting.get(options2, (e, r, b) => {
+					console.log({b});
 					const sibId = b.appointments[0].id;
 
 					console.log({sibId});
@@ -139,12 +143,13 @@ router.post(`/create`, async (req, res) => {
 					const data2 = {
 						fields: [
 							{
-								id: 9425936,
+								id: 9460741,
 								value: sibId
 							}
 						]
 					};
 
+					// Dev 1 - #4
 					const options3 = {
 						url: `https://acuityscheduling.com/api/v1/appointments/${sibId}`,
 						auth: {
