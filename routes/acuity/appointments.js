@@ -120,8 +120,7 @@ router.post(`/create`, async (req, res) => {
 
 					console.log(typeof body);
 					console.log(typeof JSON.parse(body));
-					console.log(typeof JSON.parse(body.id));
-					console.log({body});
+					console.log(typeof body);
 					if (err) {
 						console.dir(err);
 						return;
