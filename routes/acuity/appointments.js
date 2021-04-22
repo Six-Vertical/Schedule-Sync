@@ -210,15 +210,7 @@ router.post('/delete', async (req, res) => {
 				console.log({dev1IsParent: 'Dev1 is Parent'});
 
 				// DEV1 IS PARENT
-				const options = {
-					url: `https://acuityscheduling.com/api/v1/appointments?field:9460741=${dev1OriginCheck}`,
-					auth: {
-						user: process.env.ACUITY_USER_ID_DEV_2,
-						password: process.env.ACUITY_API_KEY_DEV_2
-					}
-				};
-
-				requesting.get(options, (er, re, bo) => {
+				acuityDev2.request(`https://acuityscheduling.com/api/v1/appointments?field:9460741=${dev1OriginCheck}`, {method: 'GET'}, (er, re, bo) => {
 					if (er) {
 						console.log(er);
 						return res.status(400).json({success: false, error: er});
