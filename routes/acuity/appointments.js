@@ -120,7 +120,8 @@ router.post(`/create`, async (req, res) => {
 
 					console.log(typeof body);
 					console.log(typeof JSON.parse(body));
-					console.log({realBody: body});
+					console.log({body});
+					console.log({updatedBody: updatedBody.id});
 					if (err) {
 						console.dir(err);
 						return;
@@ -148,6 +149,8 @@ router.post(`/create`, async (req, res) => {
 					};
 
 					requesting.put(options2, function (x, y, z) {
+						console.log({typeOfZ: typeof z});
+						console.log({z});
 						if (x) {
 							console.log({x});
 							return;
@@ -224,7 +227,11 @@ router.post(`/create/d2`, async (req, res) => {
 
 				requesting.post(options, function (err, rez, body) {
 					const updatedBody = JSON.parse(body);
-					console.log({updatedBody});
+
+					console.log(typeof body);
+					console.log(typeof JSON.parse(body));
+					console.log({body});
+					console.log({updatedBody: updatedBody.id});
 					if (err) {
 						console.dir(err);
 						return;
