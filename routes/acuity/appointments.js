@@ -117,11 +117,14 @@ router.post(`/create`, async (req, res) => {
 					console.log({reqBodyID: req.body.id, aptId: apt.id, bodyId: body.id});
 
 					const updatedBody = JSON.parse(body);
+					const updatedBody2 = JSON.parse(body.id);
 
 					console.log(typeof body);
 					console.log(typeof JSON.parse(body));
 					console.log({body});
 					console.log({updatedBody: updatedBody.id});
+					console.log({ugh: updatedBody});
+					console.log({updatedBody2});
 					if (err) {
 						console.dir(err);
 						return;
