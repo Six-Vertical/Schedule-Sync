@@ -204,6 +204,8 @@ router.post('/delete', async (req, res) => {
 		acuity.request(`/appointments/${req.body.id}`, {method: 'GET'}, (error, rez, apt) => {
 			const dev1OriginCheck = apt.forms.find((form) => form.id === 1701777).values.find((f) => f.fieldID === 9425936).value;
 
+			console.log({dev1OriginCheck});
+
 			if (dev1OriginCheck === '') {
 				// DEV1 IS PARENT
 				const options = {
@@ -220,6 +222,8 @@ router.post('/delete', async (req, res) => {
 						return res.status(400).json({success: false, error: er});
 					}
 
+					console.log({bo});
+
 					const options2 = {
 						url: `https://acuityscheduling.com/api/v1/appointments/$${bo.appointments[0].id}/cancel?admin=true`,
 						auth: {
@@ -228,11 +232,13 @@ router.post('/delete', async (req, res) => {
 						}
 					};
 
-					requesting.put(options, (x, y, z) => {
+					requesting.put(options2, (x, y, z) => {
 						if (x) {
 							console.log(x);
 							return res.status(400).json({success: false, error: x});
 						}
+
+						console.log({z});
 
 						res.json({success: true, body: z});
 					});
