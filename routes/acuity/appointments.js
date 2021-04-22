@@ -55,9 +55,11 @@ router.put('/:aptId', async (req, res) => {
 	}
 });
 
+//////////////////////////////////////// CREATE //////////////////////////////////
+
 // @route   POST /api/v1/acuity/appointments/create
 // @acuity  POST /appointments/appointments
-// @desc    Create Parent/Child Appointments - This is the route that "syncs the schedules" as they say
+// @desc    Create sibling appointment ** Dev1 => Dev1
 // @access  Private
 router.post(`/create`, async (req, res) => {
 	console.log(req.body, 'REQ.BODY'.america.bold);
@@ -96,7 +98,7 @@ router.post(`/create`, async (req, res) => {
 					fields: [
 						{
 							id: 9460741, //Dev2 fieldID
-							value: req.body.id
+							value: apt.id
 						}
 					]
 				};
@@ -120,56 +122,57 @@ router.post(`/create`, async (req, res) => {
 						return;
 					}
 					console.dir('status code', rez.statusCode);
+					res.status(201).json({success: true, body});
 				});
 
 				// Dev 2 - #3
-				const options2 = {
-					url: `https://acuityscheduling.com/api/v1/appointments?field:9460741=${apt.id}`,
-					auth: {
-						user: process.env.ACUITY_USER_ID_DEV_2,
-						password: process.env.ACUITY_API_KEY_DEV_2
-					}
-				};
+				// // const options2 = {
+				// // 	url: `https://acuityscheduling.com/api/v1/appointments?field:9460741=${apt.id}`,
+				// // 	auth: {
+				// // 		user: process.env.ACUITY_USER_ID_DEV_2,
+				// // 		password: process.env.ACUITY_API_KEY_DEV_2
+				// // 	}
+				// // };
 
-				requesting.get(options2, (e, r, b) => {
-					console.log({b});
-					const sibId = b.forms.find((form) => form.id === 1708418).values.find((val) => val.fieldID == 9460741).value;
+				// // requesting.get(options2, async (e, r, b) => {
+				// // 	console.log({b});
+				// // 	const sibId = await b.forms.find((form) => form.id === 1708418).values.find((val) => val.fieldID == 9460741).value;
 
-					console.log({sibId});
+				// // 	console.log({sibId});
 
-					if (e) {
-						console.error(e);
-						return;
-					}
+				// // 	if (e) {
+				// // 		console.error(e);
+				// // 		return;
+				// // 	}
 
-					const data2 = {
-						fields: [
-							{
-								id: 9425936,
-								value: sibId
-							}
-						]
-					};
+				// // 	const data2 = {
+				// // 		fields: [
+				// // 			{
+				// // 				id: 9425936,
+				// // 				value: sibId
+				// // 			}
+				// // 		]
+				// // 	};
 
-					// Dev 1 - #4
-					const options3 = {
-						url: `https://acuityscheduling.com/api/v1/appointments/${sibId}`,
-						auth: {
-							user: process.env.ACUITY_USER_ID_DEV_1,
-							password: process.env.ACUITY_API_KEY_DEV_1
-						},
-						body: JSON.stringify(data2)
-					};
+				// // 	// Dev 1 - #4
+				// // 	const options3 = {
+				// // 		url: `https://acuityscheduling.com/api/v1/appointments/${sibId}`,
+				// // 		auth: {
+				// // 			user: process.env.ACUITY_USER_ID_DEV_1,
+				// // 			password: process.env.ACUITY_API_KEY_DEV_1
+				// // 		},
+				// // 		body: JSON.stringify(data2)
+				// // 	};
 
-					requesting.put(options3, (x, y, z) => {
-						if (x) {
-							console.log({x});
-							return;
-						}
+				// // 	requesting.put(options3, (x, y, z) => {
+				// // 		if (x) {
+				// // 			console.log({x});
+				// // 			return;
+				// // 		}
 
-						res.json({success: true, body: z});
-					});
-				});
+				// // 		res.json({success: true, body: z});
+				// // 	});
+				// });
 			}
 		);
 	} catch (err) {
@@ -180,7 +183,7 @@ router.post(`/create`, async (req, res) => {
 
 // @route   POST /api/v1/acuity/appointments/create/d2
 // @acuity  POST /appointments/appointments
-// @desc    Create Parent/Child Appointments - This is the route that "syncs the schedules" as they say
+// @desc    Create sibling appointments ** Dev2 => Dev1 **
 // @access  Private
 router.post(`/create/d2`, async (req, res) => {
 	console.log(req.body, 'REQ.BODY'.america.bold);
@@ -249,6 +252,12 @@ router.post(`/create/d2`, async (req, res) => {
 	}
 });
 
+//////////////////////////////////////// CANCEL //////////////////////////////////
+
+// @route   POST /api/v1/acuity/appointments/cancel
+// @acuity  PUT /appointments/:aptID/cancel
+// @desc    Create Parent/Child Appointments - This is the route that "syncs the schedules" as they say
+// @access  Private
 router.post('/cancel', async (req, res) => {
 	console.log({headers: req.headers, body: req.body});
 
@@ -312,7 +321,6 @@ router.post('/cancel', async (req, res) => {
 			}
 
 			const options = {
-				method: 'PUT',
 				url: `https://acuityscheduling.com/api/v1/appointments/$${req.body.id}/cancel?admin=true`,
 				auth: {
 					user: process.env.ACUITY_USER_ID_DEV_2,
@@ -330,6 +338,50 @@ router.post('/cancel', async (req, res) => {
 			});
 		});
 		res.json({success: true, data: 'hey Will'});
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({success: false, data: 'Server Error'});
+	}
+});
+
+//////////////////////////////////////// RESCHEDULE //////////////////////////////////
+
+// @route   POST /api/v1/acuity/appointments/reschedule
+// @acuity  PUT /appointments/:aptID/reschedule
+// @desc    Reschedule sibling appointment ** Dev1 => Dev2 **
+// @access  Private
+router.post('/reschedule', async (req, res) => {
+	console.log({body: req.body, headers: req.headers});
+
+	try {
+		acuity.request(`/appointments/${req.body.id}`, {method: 'GET'}, (error, rez, apt) => {
+			if (error) {
+				console.log(error);
+				return;
+			}
+
+			const data = {
+				datetime: apt.datetime
+			};
+
+			const options = {
+				url: `https://acuityscheduling.com/api/v1/appointments/$${req.body.id}/cancel?admin=true`,
+				auth: {
+					user: process.env.ACUITY_USER_ID_DEV_2,
+					password: process.env.ACUITY_API_KEY_DEV_2
+				},
+				body: JSON.stringify(data)
+			};
+
+			requesting.put(options, (e, r, b) => {
+				if (e) {
+					console.error(e);
+					return;
+				}
+
+				console.log({b});
+			});
+		});
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({success: false, data: 'Server Error'});
