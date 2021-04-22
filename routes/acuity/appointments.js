@@ -116,6 +116,11 @@ router.post(`/create`, async (req, res) => {
 				requesting.post(options, function (err, rez, body) {
 					console.log({reqBodyID: req.body.id, aptId: apt.id, bodyId: body.id});
 
+					console.log(rez);
+
+					console.log(typeof body);
+					console.log(typeof JSON.parse(body));
+					console.log(typeof JSON.parse(body.id));
 					console.log({body});
 					if (err) {
 						console.dir(err);
@@ -131,7 +136,7 @@ router.post(`/create`, async (req, res) => {
 						fields: [
 							{
 								id: 9425936, // Dev1 Field ID
-								value: JSON.parse(body.id)
+								value: body.id
 							}
 						]
 					};
@@ -146,7 +151,7 @@ router.post(`/create`, async (req, res) => {
 						body: JSON.stringify(data2)
 					};
 
-					requesting.put(options2, (x, y, z) => {
+					requesting.put(options2, function (x, y, z) {
 						console.log({z});
 
 						if (x) {
