@@ -207,6 +207,8 @@ router.post('/delete', async (req, res) => {
 			console.log({dev1OriginCheck});
 
 			if (dev1OriginCheck === '') {
+				console.log({dev1IsParent: 'Dev1 is Parent'});
+
 				// DEV1 IS PARENT
 				const options = {
 					url: `https://acuityscheduling.com/api/v1/appointments?field:9460741=${dev1OriginCheck}`,
@@ -238,13 +240,15 @@ router.post('/delete', async (req, res) => {
 							return res.status(400).json({success: false, error: x});
 						}
 
-						console.log({z});
+						console.log({});
 
 						res.json({success: true, body: z});
 					});
 				});
 			} else {
 				// DEV2 IS PARENT
+				console.log({dev2IsParent: 'Dev2 is Parent'});
+
 				const options = {
 					url: `https://acuityscheduling.com/api/v1/appointments/$${dev1OriginCheck}/cancel?admin=true`,
 					auth: {
