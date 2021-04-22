@@ -117,19 +117,19 @@ router.post(`/create`, async (req, res) => {
 					console.log({reqBodyID: req.body.id, aptId: apt.id, bodyId: body.id});
 
 					const updatedBody = JSON.parse(body);
-					const updatedBody2 = JSON.parse(body.id);
 
 					console.log(typeof body);
 					console.log(typeof JSON.parse(body));
-					console.log({body});
+					console.log({realBody: body});
 					console.log({updatedBody: updatedBody.id});
-					console.log({ugh: updatedBody});
-					console.log({updatedBody2});
 					if (err) {
 						console.dir(err);
 						return;
 					}
 					console.dir('status code', rez.statusCode);
+					// res.status(201).json({success: true, body});
+
+					// PUT /appointments/${body.id} DEV1
 
 					// Dev1 - #3
 					const data2 = {
@@ -154,6 +154,7 @@ router.post(`/create`, async (req, res) => {
 					requesting.put(options2, function (x, y, z) {
 						console.log({typeOfZ: typeof z});
 						console.log({z});
+
 						if (x) {
 							console.log({x});
 							return;
@@ -185,7 +186,6 @@ router.post(`/create/d2`, async (req, res) => {
 		console.log(mappingKey);
 		console.log({calMappingKey});
 
-		// Dev2 - #1
 		acuityDev2.request(
 			`/appointments/${req.body.id}`,
 			{
@@ -193,15 +193,12 @@ router.post(`/create/d2`, async (req, res) => {
 			},
 			(err, rez, apt) => {
 				if (apt.email == '') {
-					apt.email = 'dev2@moveamerica.us';
+					apt.email = 'dev1@moveamerica.us';
 				}
 
 				const formattedTime = apt.datetime.split('T')[1];
 				const formattedDate = apt.datetime.split('T')[0];
 
-				console.log({apt});
-
-				// Dev1 - #2
 				data = {
 					firstName: apt.firstName,
 					lastName: apt.lastName,
@@ -212,7 +209,7 @@ router.post(`/create/d2`, async (req, res) => {
 					notes: `This sibling appointment was created automatically with Schedule-Sync`,
 					fields: [
 						{
-							id: 9425936, //Dev1 fieldID
+							id: 9425936, // Dev1 Sibling Field ID
 							value: apt.id
 						}
 					]
@@ -229,46 +226,13 @@ router.post(`/create/d2`, async (req, res) => {
 				};
 
 				requesting.post(options, function (err, rez, body) {
-					const updatedBody = JSON.parse(body);
-
-					console.log(typeof body);
-					console.log(typeof JSON.parse(body));
-					console.log({body});
-					console.log({updatedBody: updatedBody.id});
+					console.log(body);
 					if (err) {
 						console.dir(err);
 						return;
 					}
 					console.dir('status code', rez.statusCode);
-
-					// Dev2 - #3
-					const data2 = {
-						fields: [
-							{
-								id: 9460741, // Dev2 Field ID
-								value: updatedBody.id
-							}
-						]
-					};
-
-					const options2 = {
-						headers: {'content-type': 'application/json'},
-						url: `https://acuityscheduling.com/api/v1/appointments/${apt.id}`,
-						auth: {
-							user: process.env.ACUITY_USER_ID_DEV_2,
-							password: process.env.ACUITY_API_KEY_DEV_2
-						},
-						body: JSON.stringify(data2)
-					};
-
-					requesting.put(options2, function (x, y, z) {
-						if (x) {
-							console.log({x});
-							return;
-						}
-
-						res.status(200).json({success: true, body: z});
-					});
+					res.status(201).json({success: true, body});
 				});
 			}
 		);
