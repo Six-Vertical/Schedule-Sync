@@ -69,108 +69,153 @@ router.post(`/create`, async (req, res) => {
 		const mappingKey = await determineMapping(req.body.appointmentTypeID);
 		const calMappingKey = await determineCalMapping(req.body.calendarID);
 
-		console.log(mappingKey);
-		console.log({calMappingKey});
+		if (mappingKey == undefined || calMappingKey == undefined) {
+			console.log({mappingKey, calMappingKey});
+			res.status(400).json({success: false, message: `Appointment-Type Mapping Key (${mappingKey}) and/or Calendar Mapping Key (${calMappingKey}) are undefined. Please check endpoints, mappings, and calendars for up-to-date information.`});
+		} else {
+			console.log(mappingKey);
+			console.log({calMappingKey});
 
-		// Dev 1 - #1
-		acuity.request(
-			`/appointments/${req.body.id}`,
-			{
-				method: 'GET'
-			},
-			(err, rez, apt) => {
-				if (apt.email == '') {
-					apt.email = 'dev1@moveamerica.us';
-				}
-
-				const formattedTime = apt.datetime.split('T')[1];
-				const formattedDate = apt.datetime.split('T')[0];
-
-				// Dev 2 - #2
-				data = {
-					firstName: apt.firstName,
-					lastName: apt.lastName,
-					email: apt.email,
-					appointmentTypeID: mappingKey.type2,
-					calendarID: calMappingKey.calType2,
-					datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T12:00:00-0700`,
-					notes: `This sibling appointment was created automatically with Schedule-Sync`,
-					fields: [
-						{
-							id: 9460741, //Dev2 fieldID
-							value: apt.id
-						}
-					]
-				};
-
-				console.log({apt1: apt});
-
-				var options = {
-					headers: {'content-type': 'application/json'},
-					url: 'https://acuityscheduling.com/api/v1/appointments',
-					auth: {
-						user: mappingKey.userId2,
-						password: mappingKey.apiKey2
-					},
-					body: JSON.stringify(data)
-				};
-
-				requesting.post(options, function (err, rez, body) {
-					console.log({reqBodyID: req.body.id, aptId: apt.id, bodyId: body.id});
-
-					const updatedBody = JSON.parse(body);
-
-					console.log(typeof body);
-					console.log(typeof JSON.parse(body));
-					console.log({realBody: body});
-					console.log({updatedBody: updatedBody.id});
-					if (err) {
-						console.dir(err);
-						return;
+			// Dev 1 - #1
+			acuity.request(
+				`/appointments/${req.body.id}`,
+				{
+					method: 'GET'
+				},
+				(err, rez, apt) => {
+					if (apt.email == '') {
+						apt.email = 'dev1@moveamerica.us';
 					}
-					console.dir('status code', rez.statusCode);
-					// res.status(201).json({success: true, body});
 
-					// PUT /appointments/${body.id} DEV1
+					const olderSibID = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9678748).value;
+					const youngerSibID = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9678744).value;
 
-					// Dev1 - #3
-					if (updatedBody.id == undefined) {
-						return res.json({success: true, message: 'Dev1 ID not updated'});
-					} else {
-						const data2 = {
+					console.log({olderSibID, youngerSibID});
+
+					if (olderSibID === '' && youngerSibID === '') {
+						// BRAND NEW
+						const formattedTime = apt.datetime.split('T')[1];
+						const formattedDate = apt.datetime.split('T')[0];
+
+						// Dev 2 - #2
+						data = {
+							firstName: apt.firstName,
+							lastName: apt.lastName,
+							email: apt.email,
+							appointmentTypeID: mappingKey.type2,
+							calendarID: calMappingKey.calType2,
+							datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T12:00:00-0700`,
+							notes: `This sibling appointment was created automatically with Schedule-Sync`,
 							fields: [
 								{
-									id: 9425936, // Dev1 Field ID
-									value: updatedBody.id
+									id: 9678752, //Dev2 fieldID (Younger Sibling ID)
+									value: apt.id
 								}
 							]
 						};
 
-						const options2 = {
+						console.log({apt1: apt});
+
+						var options = {
 							headers: {'content-type': 'application/json'},
-							url: `https://acuityscheduling.com/api/v1/appointments/${apt.id}`,
+							url: 'https://acuityscheduling.com/api/v1/appointments',
 							auth: {
-								user: process.env.ACUITY_USER_ID_DEV_1,
-								password: process.env.ACUITY_API_KEY_DEV_1
+								user: mappingKey.userId2,
+								password: mappingKey.apiKey2
 							},
-							body: JSON.stringify(data2)
+							body: JSON.stringify(data)
 						};
 
-						requesting.put(options2, function (x, y, z) {
-							console.log({typeOfZ: typeof z});
-							console.log({z});
+						requesting.post(options, function (err, rez, body) {
+							console.log({reqBodyID: req.body.id, aptId: apt.id, bodyId: body.id});
 
-							if (x) {
-								console.log({x});
+							const updatedBody = JSON.parse(body);
+
+							console.log(typeof body);
+							console.log(typeof JSON.parse(body));
+							console.log({realBody: body});
+							console.log({updatedBody: updatedBody.id});
+							if (err) {
+								console.dir(err);
 								return;
 							}
+							console.dir('status code', rez.statusCode);
 
-							res.status(200).json({success: true, body: z});
+							// Dev1 - #3
+							const data2 = {
+								fields: [
+									{
+										id: 9678748, // Dev1 Field ID (Older Sibling ID)
+										value: updatedBody.id
+									}
+								]
+							};
+
+							const options2 = {
+								headers: {'content-type': 'application/json'},
+								url: `https://acuityscheduling.com/api/v1/appointments/${apt.id}`,
+								auth: {
+									user: process.env.ACUITY_USER_ID_DEV_1,
+									password: process.env.ACUITY_API_KEY_DEV_1
+								},
+								body: JSON.stringify(data2)
+							};
+
+							requesting.put(options2, function (x, y, z) {
+								console.log({typeOfZ: typeof z});
+								console.log({z});
+
+								if (x) {
+									console.log({x});
+									return;
+								}
+
+								res.status(200).json({success: true, body: z});
+							});
+
+							// if (updatedBody.id == undefined) {
+							// 	return res.json({success: true, message: 'Dev1 ID not updated'});
+							// } else {
+							// 	const data2 = {
+							// 		fields: [
+							// 			{
+							// 				id: 9425936, // Dev1 Field ID
+							// 				value: updatedBody.id
+							// 			}
+							// 		]
+							// 	};
+
+							// const options2 = {
+							// 	headers: {'content-type': 'application/json'},
+							// 	url: `https://acuityscheduling.com/api/v1/appointments/${apt.id}`,
+							// 	auth: {
+							// 		user: process.env.ACUITY_USER_ID_DEV_1,
+							// 		password: process.env.ACUITY_API_KEY_DEV_1
+							// 	},
+							// 	body: JSON.stringify(data2)
+							// };
+
+							// requesting.put(options2, function (x, y, z) {
+							// 	console.log({typeOfZ: typeof z});
+							// 	console.log({z});
+
+							// 	if (x) {
+							// 		console.log({x});
+							// 		return;
+							// 	}
+
+							// 	res.status(200).json({success: true, body: z});
+							// });
+							// }
 						});
+					} else {
+						// ALREADY A SIBLING
+						console.log('Already a sibling');
+						res.json({success: true, message: 'The original appointment already has a sibling.'});
 					}
-				});
-			}
-		);
+				}
+			);
+		}
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({success: false, data: 'Server Error'});
@@ -306,81 +351,28 @@ router.post('/cancel', async (req, res) => {
 
 	try {
 		acuity.request(`/appointments/${req.body.id}`, {method: 'GET'}, (error, rez, apt) => {
-			const dev1OriginCheck = apt.forms.find((form) => form.id === 1701777).values.find((f) => f.fieldID === 9425936).value;
+			if (error) {
+				console.log({error});
+				return;
+			}
 
-			console.log({dev1OriginCheck});
+			const siblingId = block.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9425936).value;
 
-			if (dev1OriginCheck === '') {
-				console.log({dev1IsParent: 'Dev1 is Parent'});
-
-				// DEV1 IS PARENT
-				acuityDev2.request(`/appointments?field:9460741=${dev1OriginCheck}`, {method: 'GET'}, (er, re, bo) => {
-					if (er) {
-						console.log(er);
-						return res.status(400).json({success: false, error: er});
-					}
-
-					console.log({bo});
-
-					const options2 = {
-						url: `https://acuityscheduling.com/api/v1/appointments/$${bo.appointments[0].id}/cancel?admin=true`,
-						auth: {
-							user: process.env.ACUITY_USER_ID_DEV_2,
-							password: process.env.ACUITY_API_KEY_DEV_2
-						}
-					};
-
-					requesting.put(options2, (x, y, z) => {
-						if (x) {
-							console.log(x);
-							return res.status(400).json({success: false, error: x});
-						}
-
-						console.log({});
-
-						res.json({success: true, body: z});
-					});
-				});
+			if (!siblingId) {
+				return res.status(404).json({success: false, siblingId});
 			} else {
-				// DEV2 IS PARENT
-				console.log({dev2IsParent: 'Dev2 is Parent'});
-
 				const options = {
-					url: `https://acuityscheduling.com/api/v1/appointments/$${dev1OriginCheck}/cancel?admin=true`,
+					headers: {'content-type': 'application/json'},
+					url: `https://acuityscheduling.com/api/v1/appointments/${siblingId}/cancel`,
 					auth: {
 						user: process.env.ACUITY_USER_ID_DEV_2,
 						password: process.env.ACUITY_API_KEY_DEV_2
 					}
 				};
 
-				requesting.put(options, (errr, rex, bod) => {
-					if (errr) {
-						console.log(errr);
-						return res.status(400).json({success: false, error: errr});
-					}
-
-					res.json({success: true, body: bod});
-				});
+				requesting.put(options, () => {});
 			}
-
-			const options = {
-				url: `https://acuityscheduling.com/api/v1/appointments/$${req.body.id}/cancel?admin=true`,
-				auth: {
-					user: process.env.ACUITY_USER_ID_DEV_2,
-					password: process.env.ACUITY_API_KEY_DEV_2
-				}
-			};
-
-			requesting.put(options, (e, rezult, body) => {
-				if (e) {
-					console.log(e);
-					return;
-				}
-
-				res.json({success: true, body});
-			});
 		});
-		res.json({success: true, data: 'hey Will'});
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({success: false, data: 'Server Error'});
