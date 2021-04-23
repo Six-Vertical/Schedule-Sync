@@ -172,41 +172,6 @@ router.post(`/create`, async (req, res) => {
 
 								res.status(200).json({success: true, body: z});
 							});
-
-							// if (updatedBody.id == undefined) {
-							// 	return res.json({success: true, message: 'Dev1 ID not updated'});
-							// } else {
-							// 	const data2 = {
-							// 		fields: [
-							// 			{
-							// 				id: 9425936, // Dev1 Field ID
-							// 				value: updatedBody.id
-							// 			}
-							// 		]
-							// 	};
-
-							// const options2 = {
-							// 	headers: {'content-type': 'application/json'},
-							// 	url: `https://acuityscheduling.com/api/v1/appointments/${apt.id}`,
-							// 	auth: {
-							// 		user: process.env.ACUITY_USER_ID_DEV_1,
-							// 		password: process.env.ACUITY_API_KEY_DEV_1
-							// 	},
-							// 	body: JSON.stringify(data2)
-							// };
-
-							// requesting.put(options2, function (x, y, z) {
-							// 	console.log({typeOfZ: typeof z});
-							// 	console.log({z});
-
-							// 	if (x) {
-							// 		console.log({x});
-							// 		return;
-							// 	}
-
-							// 	res.status(200).json({success: true, body: z});
-							// });
-							// }
 						});
 					} else {
 						// ALREADY A SIBLING
@@ -347,88 +312,6 @@ router.post(`/create/d2`, async (req, res) => {
 						console.log('Already a sibling');
 						res.json({success: true, message: 'The original appointment already has a sibling.'});
 					}
-
-					// // Dev1 - #2
-					// data = {
-					// 	firstName: apt.firstName,
-					// 	lastName: apt.lastName,
-					// 	email: apt.email,
-					// 	appointmentTypeID: mappingKey.type2,
-					// 	calendarID: calMappingKey.calType2,
-					// 	datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T13:00:00-0700`,
-					// 	notes: `This sibling appointment was created automatically with Schedule-Sync`,
-					// 	fields: [
-					// 		{
-					// 			id: 9425936, // Dev1 Sibling Field ID
-					// 			value: apt.id
-					// 		}
-					// 	]
-					// };
-
-					// console.log({aptDev2: apt});
-
-					// var options = {
-					// 	headers: {'content-type': 'application/json'},
-					// 	url: 'https://acuityscheduling.com/api/v1/appointments',
-					// 	auth: {
-					// 		user: mappingKey.userId2,
-					// 		password: mappingKey.apiKey2
-					// 	},
-					// 	body: JSON.stringify(data)
-					// };
-
-					// requesting.post(options, function (err, rez, body) {
-					// 	console.log({reqBodyID: req.body.id, aptId: apt.id, bodyId: body.id});
-
-					// 	const updatedBody = JSON.parse(body);
-
-					// 	console.log(typeof body);
-					// 	console.log(typeof JSON.parse(body));
-					// 	console.log({realBody: body});
-					// 	console.log({updatedBody: updatedBody.id});
-					// 	if (err) {
-					// 		console.dir(err);
-					// 		return;
-					// 	}
-					// 	console.dir('status code', rez.statusCode);
-					// 	// res.status(201).json({success: true, body});
-
-					// 	// Dev2 - #3
-					// 	if (updatedBody.id == undefined) {
-					// 		return res.json({success: true, message: 'Dev2 ID not updated'});
-					// 	} else {
-					// 		const data3 = {
-					// 			fields: [
-					// 				{
-					// 					id: 9460741,
-					// 					value: updatedBody.id
-					// 				}
-					// 			]
-					// 		};
-
-					// 		const options3 = {
-					// 			headers: {'content-type': 'application/json'},
-					// 			url: `https://acuityscheduling.com/api/v1/appointments/${apt.id}`,
-					// 			auth: {
-					// 				user: process.env.ACUITY_USER_ID_DEV_2,
-					// 				password: process.env.ACUITY_API_KEY_DEV_2
-					// 			},
-					// 			body: JSON.stringify(data3)
-					// 		};
-
-					// 		requesting.put(options3, function (x, y, z) {
-					// 			console.log({typeOfZ: typeof z});
-					// 			console.log({z});
-
-					// 			if (x) {
-					// 				console.log({x});
-					// 				return;
-					// 			}
-
-					// 			res.status(200).json({success: true, body: z});
-					// 		});
-					// 	}
-					// });
 				}
 			);
 		}
@@ -454,23 +337,59 @@ router.post('/cancel', async (req, res) => {
 				return;
 			}
 
-			const siblingId = block.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9425936).value;
+			console.log({apt1: apt});
 
-			if (!siblingId) {
-				return res.status(404).json({success: false, siblingId});
-			} else {
+			const olderSibID = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9678748).value;
+			const youngerSibID = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9678744).value;
+
+			if (youngerSibID === '') {
 				const options = {
 					headers: {'content-type': 'application/json'},
-					url: `https://acuityscheduling.com/api/v1/appointments/${siblingId}/cancel`,
+					url: `https://acuityscheduling.com/api/v1/appointments/${olderSibID}/cancel`,
 					auth: {
 						user: process.env.ACUITY_USER_ID_DEV_2,
 						password: process.env.ACUITY_API_KEY_DEV_2
 					}
 				};
 
-				requesting.put(options, () => {});
+				requesting.put(options, (e, r, b) => {
+					if (e) {
+						console.log({error: e});
+						return;
+					}
+
+					res.json({success: true, body: b});
+				});
+			} else {
+				console.log(`No sibling to be deleted`);
+
+				res.status(200).json({success: true, message: `No sibling to be deleted.`});
 			}
 		});
+
+		// acuity.request(`/appointments/${req.body.id}`, {method: 'GET'}, (error, rez, apt) => {
+		// 	if (error) {
+		// 		console.log({error});
+		// 		return;
+		// 	}
+
+		// 	const siblingId = block.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9425936).value;
+
+		// 	if (!siblingId) {
+		// 		return res.status(404).json({success: false, siblingId});
+		// 	} else {
+		// 		const options = {
+		// 			headers: {'content-type': 'application/json'},
+		// 			url: `https://acuityscheduling.com/api/v1/appointments/${siblingId}/cancel`,
+		// 			auth: {
+		// 				user: process.env.ACUITY_USER_ID_DEV_2,
+		// 				password: process.env.ACUITY_API_KEY_DEV_2
+		// 			}
+		// 		};
+
+		// 		requesting.put(options, () => {});
+		// 	}
+		// });
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({success: false, data: 'Server Error'});
@@ -483,7 +402,12 @@ router.post('/cancel', async (req, res) => {
 // @access  Admin
 router.post('/cancel/d2', async (req, res) => {
 	try {
-		res.send('Index');
+		acuityDev2.request(`/appointments/${req.body.id}`, {method: 'GET'}, (error, rez, apt) => {
+			if (error) {
+				console.log({error});
+				return;
+			}
+		});
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({success: false, data: 'Server Error'});
