@@ -407,6 +407,35 @@ router.post('/cancel/d2', async (req, res) => {
 				console.log({error});
 				return;
 			}
+
+			console.log({apt2: apt});
+
+			const olderSibID = apt.forms.find((form) => form.id === 1708418).values.find((val) => val.fieldID === 9678751).value;
+			const youngerSibID = apt.forms.find((form) => form.id === 1708418).values.find((val) => val.fieldID === 9678752).value;
+
+			if (youngerSibID === '') {
+				const options = {
+					headers: {'content-type': 'application/json'},
+					url: `https://acuityscheduling.com/api/v1/appointments/${olderSibID}/cancel`,
+					auth: {
+						user: process.env.ACUITY_USER_ID_DEV_1,
+						password: process.env.ACUITY_API_KEY_DEV_1
+					}
+				};
+
+				requesting.put(options, (e, r, b) => {
+					if (e) {
+						console.log({error: e});
+						return;
+					}
+
+					res.json({success: true, body: b});
+				});
+			} else {
+				console.log(`No sibling to be deleted`);
+
+				res.status(200).json({success: true, message: `No sibling to be deleted.`});
+			}
 		});
 	} catch (err) {
 		console.error(err);
