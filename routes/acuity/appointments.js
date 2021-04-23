@@ -248,36 +248,40 @@ router.post(`/create/d2/create`, async (req, res) => {
 					// res.status(201).json({success: true, body});
 
 					// Dev2 - #3
-					const data3 = {
-						fields: [
-							{
-								id: 9460741,
-								value: updatedBody.id
+					if (updatedBody.id == undefined) {
+						return res.json({success: true, message: 'Dev2 ID not updated'});
+					} else {
+						const data3 = {
+							fields: [
+								{
+									id: 9460741,
+									value: updatedBody.id
+								}
+							]
+						};
+
+						const options3 = {
+							headers: {'content-type': 'application/json'},
+							url: `https://acuityscheduling.com/api/v1/appointments/${apt.id}`,
+							auth: {
+								user: process.env.ACUITY_USER_ID_DEV_2,
+								password: process.env.ACUITY_API_KEY_DEV_2
+							},
+							body: JSON.stringify(data3)
+						};
+
+						requesting.put(options3, function (x, y, z) {
+							console.log({typeOfZ: typeof z});
+							console.log({z});
+
+							if (x) {
+								console.log({x});
+								return;
 							}
-						]
-					};
 
-					const options3 = {
-						headers: {'content-type': 'application/json'},
-						url: `https://acuityscheduling.com/api/v1/appointments/${apt.id}`,
-						auth: {
-							user: process.env.ACUITY_USER_ID_DEV_2,
-							password: process.env.ACUITY_API_KEY_DEV_2
-						},
-						body: JSON.stringify(data3)
-					};
-
-					requesting.put(options3, function (x, y, z) {
-						console.log({typeOfZ: typeof z});
-						console.log({z});
-
-						if (x) {
-							console.log({x});
-							return;
-						}
-
-						res.status(200).json({success: true, body: z});
-					});
+							res.status(200).json({success: true, body: z});
+						});
+					}
 				});
 			}
 		);
