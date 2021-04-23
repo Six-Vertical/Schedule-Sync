@@ -103,6 +103,8 @@ router.post(`/create`, async (req, res) => {
 					]
 				};
 
+				console.log({apt1: apt});
+
 				var options = {
 					headers: {'content-type': 'application/json'},
 					url: 'https://acuityscheduling.com/api/v1/appointments',
