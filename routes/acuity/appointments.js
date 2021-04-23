@@ -342,7 +342,7 @@ router.post('/cancel', async (req, res) => {
 			const olderSibID = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9678748).value;
 			const youngerSibID = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9678744).value;
 
-			if (youngerSibID === '') {
+			if (youngerSibID !== '') {
 				const options = {
 					headers: {'content-type': 'application/json'},
 					url: `https://acuityscheduling.com/api/v1/appointments/${olderSibID}/cancel`,
@@ -413,7 +413,7 @@ router.post('/cancel/d2', async (req, res) => {
 			const olderSibID = apt.forms.find((form) => form.id === 1708418).values.find((val) => val.fieldID === 9678751).value;
 			const youngerSibID = apt.forms.find((form) => form.id === 1708418).values.find((val) => val.fieldID === 9678752).value;
 
-			if (youngerSibID === '') {
+			if (youngerSibID !== '') {
 				const options = {
 					headers: {'content-type': 'application/json'},
 					url: `https://acuityscheduling.com/api/v1/appointments/${olderSibID}/cancel`,
