@@ -134,36 +134,40 @@ router.post(`/create`, async (req, res) => {
 					// PUT /appointments/${body.id} DEV1
 
 					// Dev1 - #3
-					const data2 = {
-						fields: [
-							{
-								id: 9425936, // Dev1 Field ID
-								value: updatedBody.id
+					if (updatedBody.id == undefined) {
+						return res.json({success: true, message: 'Dev1 ID not updated'});
+					} else {
+						const data2 = {
+							fields: [
+								{
+									id: 9425936, // Dev1 Field ID
+									value: updatedBody.id
+								}
+							]
+						};
+
+						const options2 = {
+							headers: {'content-type': 'application/json'},
+							url: `https://acuityscheduling.com/api/v1/appointments/${apt.id}`,
+							auth: {
+								user: process.env.ACUITY_USER_ID_DEV_1,
+								password: process.env.ACUITY_API_KEY_DEV_1
+							},
+							body: JSON.stringify(data2)
+						};
+
+						requesting.put(options2, function (x, y, z) {
+							console.log({typeOfZ: typeof z});
+							console.log({z});
+
+							if (x) {
+								console.log({x});
+								return;
 							}
-						]
-					};
 
-					const options2 = {
-						headers: {'content-type': 'application/json'},
-						url: `https://acuityscheduling.com/api/v1/appointments/${apt.id}`,
-						auth: {
-							user: process.env.ACUITY_USER_ID_DEV_1,
-							password: process.env.ACUITY_API_KEY_DEV_1
-						},
-						body: JSON.stringify(data2)
-					};
-
-					requesting.put(options2, function (x, y, z) {
-						console.log({typeOfZ: typeof z});
-						console.log({z});
-
-						if (x) {
-							console.log({x});
-							return;
-						}
-
-						res.status(200).json({success: true, body: z});
-					});
+							res.status(200).json({success: true, body: z});
+						});
+					}
 				});
 			}
 		);
@@ -173,11 +177,11 @@ router.post(`/create`, async (req, res) => {
 	}
 });
 
-// @route   POST /api/v1/acuity/appointments/create/d2/create
+// @route   POST /api/v1/acuity/appointments/create/d2
 // @acuity  POST /appointments/appointments
 // @desc    Create sibling appointments ** Dev2 => Dev1 **
 // @access  Private
-router.post(`/create/d2/create`, async (req, res) => {
+router.post(`/create/d2`, async (req, res) => {
 	console.log(req.body, 'REQ.BODY'.america.bold);
 	console.log(req.headers, 'REQ.HEADERS'.green.bold);
 
