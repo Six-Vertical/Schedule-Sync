@@ -451,7 +451,7 @@ router.post('/reschedule', async (req, res) => {
 
 				const options = {
 					headers: {'content-type': 'application/json'},
-					url: `https://acuityscheduling.com/api/v1/appointments/${req.body.id}/reschedule?admin=true`,
+					url: `https://acuityscheduling.com/api/v1/appointments/${youngerSibID}/reschedule?admin=true`,
 					auth: {
 						user: process.env.ACUITY_USER_ID_DEV_2,
 						password: process.env.ACUITY_API_KEY_DEV_2
@@ -505,7 +505,7 @@ router.post('/reschedule/d2', async (req, res) => {
 
 				const options = {
 					headers: {'content-type': 'application/json'},
-					url: `https://acuityscheduling.com/api/v1/appointments/${req.body.id}/reschedule?admin=true`,
+					url: `https://acuityscheduling.com/api/v1/appointments/${youngerSibID}/reschedule?admin=true`,
 					auth: {
 						user: process.env.ACUITY_USER_ID_DEV_1,
 						password: process.env.ACUITY_API_KEY_DEV_1
