@@ -108,7 +108,7 @@ router.post(`/create`, async (req, res) => {
 							notes: `This sibling appointment was created automatically with Schedule-Sync`,
 							fields: [
 								{
-									id: 9678752, //Dev2 fieldID (Younger Sibling ID)
+									id: 9678751, //Dev2 fieldID (Older Sibling ID)
 									value: apt.id
 								}
 							]
@@ -145,7 +145,7 @@ router.post(`/create`, async (req, res) => {
 							const data2 = {
 								fields: [
 									{
-										id: 9678748, // Dev1 Field ID (Older Sibling ID)
+										id: 9678744, // Dev1 Field ID (Younger Sibling ID)
 										value: updatedBody.id
 									}
 								]
@@ -238,7 +238,7 @@ router.post(`/create/d2`, async (req, res) => {
 							notes: `This sibling appointment was created automatically with Schedule-Sync`,
 							fields: [
 								{
-									id: 9678744, // Dev1 Field ID (Younger Sibling ID)
+									id: 9678748, // Dev1 Field ID (Older Sibling ID)
 									value: apt.id
 								}
 							]
@@ -278,7 +278,7 @@ router.post(`/create/d2`, async (req, res) => {
 								const data3 = {
 									fields: [
 										{
-											id: 9678751, // Dev2 Field ID (Older Sibling ID)
+											id: 9678752, // Dev2 Field ID (Younger Sibling ID)
 											value: updatedBody.id
 										}
 									]
