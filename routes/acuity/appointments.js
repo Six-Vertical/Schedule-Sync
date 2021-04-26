@@ -446,8 +446,11 @@ router.post('/reschedule', async (req, res) => {
 			} else {
 				const calMappingKey = determineCalMapping(apt.calendarID);
 
+				const formattedTime = apt.datetime.split('T')[1];
+				const formattedDate = apt.datetime.split('T')[0];
+
 				const data = {
-					datetime: apt.datetime,
+					datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T12:00:00-0700`,
 					calendarID: calMappingKey
 				};
 
@@ -508,8 +511,11 @@ router.post('/reschedule/d2', async (req, res) => {
 			} else {
 				const calMappingKey = determineCalMapping(apt.calendarID);
 
+				const formattedTime = apt.datetime.split('T')[1];
+				const formattedDate = apt.datetime.split('T')[0];
+
 				const data = {
-					datetime: apt.datetime,
+					datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T13:00:00-0700`,
 					calendarID: calMappingKey
 				};
 
