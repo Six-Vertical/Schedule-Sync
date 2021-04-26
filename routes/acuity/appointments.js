@@ -449,6 +449,8 @@ router.post('/reschedule', async (req, res) => {
 					calendarID: apt.calendarID
 				};
 
+				console.log({data1: data});
+
 				const options = {
 					headers: {'content-type': 'application/json'},
 					url: `https://acuityscheduling.com/api/v1/appointments/${youngerSibID}/reschedule?admin=true`,
@@ -459,11 +461,15 @@ router.post('/reschedule', async (req, res) => {
 					body: JSON.stringify(data)
 				};
 
+				console.log({options1: options});
+
 				requesting.put(options, (x, y, z) => {
 					if (x) {
 						console.error({x});
 						return;
 					}
+
+					console.log({z1: z});
 
 					res.status(200).json({success: true, body: z});
 				});
@@ -503,6 +509,8 @@ router.post('/reschedule/d2', async (req, res) => {
 					calendarID: apt.calendarID
 				};
 
+				console.log({data2: data});
+
 				const options = {
 					headers: {'content-type': 'application/json'},
 					url: `https://acuityscheduling.com/api/v1/appointments/${youngerSibID}/reschedule?admin=true`,
@@ -513,11 +521,15 @@ router.post('/reschedule/d2', async (req, res) => {
 					body: JSON.stringify(data)
 				};
 
+				console.log({options2: options});
+
 				requesting.put(options, function (x, y, z) {
 					if (x) {
 						console.log({x});
 						return;
 					}
+
+					console.log({z2: z});
 
 					res.status(200).json({success: true, body: z});
 				});
