@@ -5,6 +5,7 @@ const acuityDev2 = require('../../config/acuity2');
 const requesting = require('request');
 const determineBlockMapping = require('../../utils/determineBlockMapping');
 const createMultipleBlocks = require('../../utils/createMultipleBlocks');
+const createMultipleBlocksAlt = require('../../utils/createMultipleBlocksAlt');
 const existingBlock = require('../../utils/existingBlock');
 const existingBlockMiddleware = require('../../middleware/existingBlock');
 
@@ -122,6 +123,32 @@ router.post('/main', async (req, res) => {
 	}
 });
 
+// @route   POST /blocks/main/d2
+// @acuity  POST /blocks
+// @desc    Check existing blocks and create them in our environment
+// @access  Admin
+router.post('/main/d2', async (req, res) => {
+	console.log({body: req.body, headers: req.headers});
+
+	try {
+		acuity.request('/blocks', {method: 'GET'}, (error, rez, blocks) => {
+			if (error) {
+				console.log(error);
+				return res.status(400).json({success: false, error});
+			}
+
+			//** SEARCH FOR ALREADY EXISTING **\\
+
+			createMultipleBlocksAlt(blocks);
+
+			res.status(201).json({success: true, blocks: 'All blocks from Dev1 have been synced to Dev2'});
+		});
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({success: false, data: 'Server Error'});
+	}
+});
+
 // @route   POST /blocks/create
 // @route   POST /blocks
 // @desc    Create sibling block, Dev2 => Dev1
@@ -135,33 +162,9 @@ router.post('/create', async (req, res) => {
 				console.log(error);
 			}
 
-			const blockMappingKey = determineBlockMapping(block.calendarID);
+			// SEARCH FOR ALREADY EXISTING \\
 
-			data = {
-				start: block.start,
-				end: block.end,
-				calendarID: blockMappingKey.altBookCalID,
-				notes: `This sibling block is related to block ${block.id} and was created automatically with Schedule-Sync`
-			};
-
-			var options = {
-				headers: {'content-type': 'application/json'},
-				url: 'https://acuityscheduling.com/api/v1/blocks',
-				auth: {
-					user: process.env.ACUITY_USER_ID_DEV_1,
-					password: process.env.ACUITY_API_KEY_DEV_1
-				},
-				body: JSON.stringify(data)
-			};
-
-			requesting.post(options, function (errr, rezz, body) {
-				if (errr) {
-					console.log(errr);
-					return;
-				}
-
-				res.status(201).json({success: true, body});
-			});
+			createMultipleBlocks(blocks);
 		});
 	} catch (err) {
 		console.error(err);
@@ -210,7 +213,7 @@ router.post('/', async (req, res) => {
 // @access  Admin
 router.delete('/:blockId', async (req, res) => {
 	try {
-		acuityDev2.request(`/blocks/${req.params.blockId}`, {method: 'DELETE'}, (error, rez, block) => {
+		acuity.request(`/blocks/${req.params.blockId}`, {method: 'DELETE'}, (error, rez, block) => {
 			if (error) {
 				console.log(error);
 				res.status(400).json({success: false, error});
