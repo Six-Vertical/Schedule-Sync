@@ -339,13 +339,13 @@ router.post('/cancel', async (req, res) => {
 
 			console.log({apt1: apt});
 
-			const olderSibID = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9678748).value;
+			// const olderSibID = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9678748).value;
 			const youngerSibID = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9678744).value;
 
 			if (youngerSibID === '') {
-				console.log(`No sibling to be deleted`);
+				console.log(`No sibling to be cancelled`);
 
-				res.status(200).json({success: true, message: `No sibling to be deleted.`});
+				res.status(200).json({success: true, message: `No sibling to be cancelled.`});
 			} else {
 				const options = {
 					headers: {'content-type': 'application/json'},
@@ -366,30 +366,6 @@ router.post('/cancel', async (req, res) => {
 				});
 			}
 		});
-
-		// acuity.request(`/appointments/${req.body.id}`, {method: 'GET'}, (error, rez, apt) => {
-		// 	if (error) {
-		// 		console.log({error});
-		// 		return;
-		// 	}
-
-		// 	const siblingId = block.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9425936).value;
-
-		// 	if (!siblingId) {
-		// 		return res.status(404).json({success: false, siblingId});
-		// 	} else {
-		// 		const options = {
-		// 			headers: {'content-type': 'application/json'},
-		// 			url: `https://acuityscheduling.com/api/v1/appointments/${siblingId}/cancel`,
-		// 			auth: {
-		// 				user: process.env.ACUITY_USER_ID_DEV_2,
-		// 				password: process.env.ACUITY_API_KEY_DEV_2
-		// 			}
-		// 		};
-
-		// 		requesting.put(options, () => {});
-		// 	}
-		// });
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({success: false, data: 'Server Error'});
@@ -410,13 +386,13 @@ router.post('/cancel/d2', async (req, res) => {
 
 			console.log({apt2: apt});
 
-			const olderSibID = apt.forms.find((form) => form.id === 1708418).values.find((val) => val.fieldID === 9678751).value;
+			// const olderSibID = apt.forms.find((form) => form.id === 1708418).values.find((val) => val.fieldID === 9678751).value;
 			const youngerSibID = apt.forms.find((form) => form.id === 1708418).values.find((val) => val.fieldID === 9678752).value;
 
 			if (youngerSibID === '') {
-				console.log(`No sibling to be deleted`);
+				console.log(`No sibling to be cancelled`);
 
-				res.status(200).json({success: true, message: `No sibling to be deleted.`});
+				res.status(200).json({success: true, message: `No sibling to be cancelled.`});
 			} else {
 				const options = {
 					headers: {'content-type': 'application/json'},
@@ -459,27 +435,38 @@ router.post('/reschedule', async (req, res) => {
 				return;
 			}
 
-			const data = {
-				datetime: apt.datetime
-			};
+			console.log({apt1: apt});
 
-			const options = {
-				url: `https://acuityscheduling.com/api/v1/appointments/$${req.body.id}/cancel?admin=true`,
-				auth: {
-					user: process.env.ACUITY_USER_ID_DEV_2,
-					password: process.env.ACUITY_API_KEY_DEV_2
-				},
-				body: JSON.stringify(data)
-			};
+			const youngerSibID = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9678744).value;
 
-			requesting.put(options, (e, r, b) => {
-				if (e) {
-					console.error(e);
-					return;
-				}
+			if (youngerSibID === '') {
+				console.log('No sibling to be rescheduled');
 
-				console.log({b});
-			});
+				res.status(200).json({success: true, message: `No sibling to be rescheduled.`});
+			} else {
+				const data = {
+					datetime: apt.datetime
+				};
+
+				const options = {
+					headers: {'content-type': 'application/json'},
+					url: `https://acuityscheduling.com/api/v1/appointments/$${req.body.id}/reschedule?admin=true`,
+					auth: {
+						user: process.env.ACUITY_USER_ID_DEV_2,
+						password: process.env.ACUITY_API_KEY_DEV_2
+					},
+					body: JSON.stringify(data)
+				};
+
+				requesting.put(options, (x, y, z) => {
+					if (x) {
+						console.error({x});
+						return;
+					}
+
+					res.status(200).json({success: true, body: z});
+				});
+			}
 		});
 	} catch (err) {
 		console.error(err);
@@ -492,8 +479,48 @@ router.post('/reschedule', async (req, res) => {
 // @desc    Reschedule sibling appointment ** Dev2 => Dev1 **
 // @access  Admin
 router.post('/reschedule/d2', async (req, res) => {
+	console.log({body: req.body, headers: req.headers});
+
 	try {
-		res.send('Index');
+		acuityDev2.request(`/appointments/${req.body.id}`, {method: 'GET'}, (error, rez, apt) => {
+			if (error) {
+				console.log({error});
+				return;
+			}
+
+			console.log({apt2: apt});
+
+			const youngerSibID = apt.forms.find((form) => form.id === 1708418).values.find((val) => val.fieldID === 9678752).value;
+
+			if (youngerSibID === '') {
+				console.log(`No sibling to be rescheduled`);
+
+				res.status(200).json({success: true, message: `No sibling to be rescheduled.`});
+			} else {
+				const data = {
+					datetime: apt.datetime
+				};
+
+				const options = {
+					headers: {'content-type': 'application/json'},
+					url: `https://acuityscheduling.com/api/v1/appointments/$${req.body.id}/reschedule?admin=true`,
+					auth: {
+						user: process.env.ACUITY_USER_ID_DEV_1,
+						password: process.env.ACUITY_API_KEY_DEV_1
+					},
+					body: JSON.stringify(data)
+				};
+
+				requesting.put(options, function (x, y, z) {
+					if (x) {
+						console.log({x});
+						return;
+					}
+
+					res.status(200).json({success: true, body: z});
+				});
+			}
+		});
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({success: false, data: 'Server Error'});
