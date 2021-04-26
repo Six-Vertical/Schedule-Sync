@@ -444,9 +444,11 @@ router.post('/reschedule', async (req, res) => {
 
 				res.status(200).json({success: true, message: `No sibling to be rescheduled.`});
 			} else {
+				const calMappingKey = determineCalMapping(apt.calendarID);
+
 				const data = {
 					datetime: apt.datetime,
-					calendarID: apt.calendarID
+					calendarID: calMappingKey
 				};
 
 				console.log({data1: data});
@@ -504,9 +506,11 @@ router.post('/reschedule/d2', async (req, res) => {
 
 				res.status(200).json({success: true, message: `No sibling to be rescheduled.`});
 			} else {
+				const calMappingKey = determineCalMapping(apt.calendarID);
+
 				const data = {
 					datetime: apt.datetime,
-					calendarID: apt.calendarID
+					calendarID: calMappingKey
 				};
 
 				console.log({data2: data});
