@@ -6,9 +6,12 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const colors = require('colors');
+const getBlocks = require('./events/getBlocks');
 
 const app = express();
 connectDB();
+
+getBlocks();
 
 app.use(cors());
 
@@ -20,7 +23,7 @@ if (process.env.NODE_ENV === 'development') {
 	// });
 }
 
-app.use(express.urlencoded({extended: false})); // Might need to change to true if there are bugs
+app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
 app.use('/api/v1/acuity', require('./routes/acuity/acuity'));
