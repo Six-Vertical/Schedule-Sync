@@ -429,7 +429,7 @@ router.post('/reschedule', async (req, res) => {
 	console.log({body: req.body, headers: req.headers});
 
 	try {
-		acuity.request(`/appointments/${req.body.id}`, {method: 'GET'}, async (error, rez, apt) => {
+		acuity.request(`/appointments/${req.body.id}`, {method: 'GET'}, (error, rez, apt) => {
 			if (error) {
 				console.log(error);
 				return;
@@ -444,7 +444,7 @@ router.post('/reschedule', async (req, res) => {
 
 				res.status(200).json({success: true, message: `No sibling to be rescheduled.`});
 			} else {
-				const calMappingKey = await determineCalMapping(apt.calendarID);
+				const calMappingKey = determineCalMapping(apt.calendarID);
 
 				const formattedTime = apt.datetime.split('T')[1];
 				const formattedDate = apt.datetime.split('T')[0];
@@ -494,7 +494,7 @@ router.post('/reschedule/d2', async (req, res) => {
 	console.log({body: req.body, headers: req.headers});
 
 	try {
-		acuityDev2.request(`/appointments/${req.body.id}`, {method: 'GET'}, async (error, rez, apt) => {
+		acuityDev2.request(`/appointments/${req.body.id}`, {method: 'GET'}, (error, rez, apt) => {
 			if (error) {
 				console.log({error});
 				return;
@@ -509,7 +509,7 @@ router.post('/reschedule/d2', async (req, res) => {
 
 				res.status(200).json({success: true, message: `No sibling to be rescheduled.`});
 			} else {
-				const calMappingKey = await determineCalMapping(apt.calendarID);
+				const calMappingKey = determineCalMapping(apt.calendarID);
 
 				const formattedTime = apt.datetime.split('T')[1];
 				const formattedDate = apt.datetime.split('T')[0];
