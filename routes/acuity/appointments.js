@@ -349,7 +349,7 @@ router.post('/cancel', async (req, res) => {
 			} else {
 				const options = {
 					headers: {'content-type': 'application/json'},
-					url: `https://acuityscheduling.com/api/v1/appointments/${olderSibID}/cancel`,
+					url: `https://acuityscheduling.com/api/v1/appointments/${youngerSibID}/cancel`,
 					auth: {
 						user: process.env.ACUITY_USER_ID_DEV_2,
 						password: process.env.ACUITY_API_KEY_DEV_2
@@ -420,7 +420,7 @@ router.post('/cancel/d2', async (req, res) => {
 			} else {
 				const options = {
 					headers: {'content-type': 'application/json'},
-					url: `https://acuityscheduling.com/api/v1/appointments/${olderSibID}/cancel`,
+					url: `https://acuityscheduling.com/api/v1/appointments/${youngerSibID}/cancel`,
 					auth: {
 						user: process.env.ACUITY_USER_ID_DEV_1,
 						password: process.env.ACUITY_API_KEY_DEV_1
