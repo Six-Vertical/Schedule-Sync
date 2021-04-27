@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 				res.status(400).json({success: false, error});
 			}
 
-			existingBlock();
+			// existingBlock();
 
 			const alreadyExists = blocks.filter((bl) => bl.end === '2021-04-24T11:15:00-0700');
 
@@ -112,8 +112,9 @@ router.post('/main', async (req, res) => {
 			}
 
 			//** SEARCH FOR ALREADY EXISTING **\\
+			existingBlock(blocks, 2);
 
-			createMultipleBlocks(blocks);
+			// createMultipleBlocks(blocks);
 
 			res.status(201).json({success: true, blocks: 'All blocks from Dev2 have been synced to Dev1'});
 		});
@@ -138,33 +139,11 @@ router.post('/main/d2', async (req, res) => {
 			}
 
 			//** SEARCH FOR ALREADY EXISTING **\\
+			existingBlock(blocks, 1);
 
-			createMultipleBlocksAlt(blocks);
+			// createMultipleBlocksAlt(blocks);
 
 			res.status(201).json({success: true, blocks: 'All blocks from Dev1 have been synced to Dev2'});
-		});
-	} catch (err) {
-		console.error(err);
-		res.status(500).json({success: false, data: 'Server Error'});
-	}
-});
-
-// @route   POST /blocks/create
-// @route   POST /blocks
-// @desc    Create sibling block, Dev2 => Dev1
-// @access  Admin
-router.post('/create', async (req, res) => {
-	console.log({body: req.body, headers: req.headers});
-	try {
-		acuityDev2.request(`/blocks/${req.body.id}`, {method: 'GET'}, (error, rez, block) => {
-			console.log({blockFromDev2: block});
-			if (error) {
-				console.log(error);
-			}
-
-			// SEARCH FOR ALREADY EXISTING \\
-
-			createMultipleBlocks(blocks);
 		});
 	} catch (err) {
 		console.error(err);
