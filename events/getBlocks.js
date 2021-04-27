@@ -36,7 +36,6 @@ const getBlocks = () => {
 			// });
 
 			console.log(`Phase 2`);
-			return 'hey';
 		} catch (err) {
 			console.error(err);
 		}

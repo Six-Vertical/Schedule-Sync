@@ -110,6 +110,16 @@ router.post(`/create`, async (req, res) => {
 								{
 									id: 9678751, //Dev2 fieldID (Older Sibling ID)
 									value: apt.id
+								},
+								{
+									id: 9700383, // Dev2 Job Plan FieldID
+									value: `
+										First Name: ${apt.firstName},
+										Last Name: ${apt.lastName},
+										Phone: ${apt.phone},
+										Appointment-Type Name: ${apt.type},
+										Start Time: ${formattedTime}
+									`
 								}
 							]
 						};

@@ -11,16 +11,12 @@ const getBlocks = require('./events/getBlocks');
 const app = express();
 connectDB();
 
-getBlocks();
+// getBlocks();
 
 app.use(cors());
 
 if (process.env.NODE_ENV === 'development') {
 	app.use(morgan('dev'));
-	// app.use(express.static(path.join(__dirname, './', 'client', 'src', 'index.html')));
-	// app.get('*', (req, res) => {
-	// 	res.sendFile(path.resolve(__dirname, './', 'client', 'src', 'index.js'));
-	// });
 }
 
 app.use(express.urlencoded({extended: false}));
