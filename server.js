@@ -35,6 +35,7 @@ app.use('/api/v1/ma/accounts', require('./routes/api/accounts'));
 app.use('/api/v1/ma/endpoints', require('./routes/api/endpoints'));
 app.use('/api/v1/ma/mapping', require('./routes/api/mapping'));
 app.use('/api/v1/ma/calendars', require('./routes/api/calendars'));
+app.use('/api/v1/ma/blocks', require('./routes/api/blocks'));
 
 if (process.env.NODE_ENV === 'production') {
 	app.use(express.static(path.join(__dirname, 'client', 'build')));

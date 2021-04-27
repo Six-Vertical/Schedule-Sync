@@ -1,23 +1,44 @@
 const mongoose = require('mongoose');
 
 const BlockSchema = new mongoose.Schema({
-	start: {
+	blockId: {
 		type: String,
 		required: true
 	},
-	end: {
+	childBlockId: {
+		type: String
+	},
+	parentBlockId: {
+		type: String
+	},
+	startTime: {
 		type: String,
 		required: true
 	},
-	calendarID: {
-		type: Number,
+	endTime: {
+		type: String,
 		required: true
+	},
+	timezone: {
+		type: String
 	},
 	notes: {
 		type: String
 	},
-	parentID: {
-		type: String
+	calendar: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Calendar',
+		select: true
+	},
+	endpoint: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Endpoint',
+		select: true
+	},
+	account: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Account',
+		select: true
 	}
 });
 
