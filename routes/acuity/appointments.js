@@ -561,4 +561,20 @@ router.post('/reschedule/d2', async (req, res) => {
 	}
 });
 
+/////////////////////////////////////////////////////////// Updating \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+// @route   GET /accounts
+// @desc    Get all accounts
+// @access  Admin
+router.post('/update', async (req, res) => {
+	console.log('THIS IS THE NEW UPDATE ROUTE');
+	console.log({body: req.body, headers: req.headers});
+
+	try {
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({success: false, data: 'Server Error'});
+	}
+});
+
 module.exports = router;
