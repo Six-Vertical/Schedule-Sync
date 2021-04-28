@@ -128,7 +128,7 @@ router.post(`/create`, async (req, res) => {
 
 						var options = {
 							headers: {'content-type': 'application/json'},
-							url: 'https://acuityscheduling.com/api/v1/appointments',
+							url: 'https://acuityscheduling.com/api/v1/appointments?noEmail=true',
 							auth: {
 								user: mappingKey.userId2,
 								password: mappingKey.apiKey2
@@ -258,7 +258,7 @@ router.post(`/create/d2`, async (req, res) => {
 
 						var options = {
 							headers: {'content-type': 'application/json'},
-							url: 'https://acuityscheduling.com/api/v1/appointments',
+							url: 'https://acuityscheduling.com/api/v1/appointments?noEmail=true',
 							auth: {
 								user: mappingKey.userId2,
 								password: mappingKey.apiKey2
@@ -359,7 +359,7 @@ router.post('/cancel', async (req, res) => {
 			} else {
 				const options = {
 					headers: {'content-type': 'application/json'},
-					url: `https://acuityscheduling.com/api/v1/appointments/${youngerSibID}/cancel`,
+					url: `https://acuityscheduling.com/api/v1/appointments/${youngerSibID}/cancel?noEmail=true`,
 					auth: {
 						user: process.env.ACUITY_USER_ID_DEV_2,
 						password: process.env.ACUITY_API_KEY_DEV_2
@@ -406,7 +406,7 @@ router.post('/cancel/d2', async (req, res) => {
 			} else {
 				const options = {
 					headers: {'content-type': 'application/json'},
-					url: `https://acuityscheduling.com/api/v1/appointments/${youngerSibID}/cancel`,
+					url: `https://acuityscheduling.com/api/v1/appointments/${youngerSibID}/cancel?noEmail=true`,
 					auth: {
 						user: process.env.ACUITY_USER_ID_DEV_1,
 						password: process.env.ACUITY_API_KEY_DEV_1
@@ -468,7 +468,7 @@ router.post('/reschedule', async (req, res) => {
 
 				const options = {
 					headers: {'content-type': 'application/json'},
-					url: `https://acuityscheduling.com/api/v1/appointments/${youngerSibID}/reschedule`,
+					url: `https://acuityscheduling.com/api/v1/appointments/${youngerSibID}/reschedule?noEmail=true`,
 					auth: {
 						user: process.env.ACUITY_USER_ID_DEV_2,
 						password: process.env.ACUITY_API_KEY_DEV_2
@@ -533,7 +533,7 @@ router.post('/reschedule/d2', async (req, res) => {
 
 				const options = {
 					headers: {'content-type': 'application/json'},
-					url: `https://acuityscheduling.com/api/v1/appointments/${youngerSibID}/reschedule`,
+					url: `https://acuityscheduling.com/api/v1/appointments/${youngerSibID}/reschedule?noEmail=true`,
 					auth: {
 						user: process.env.ACUITY_USER_ID_DEV_1,
 						password: process.env.ACUITY_API_KEY_DEV_1
