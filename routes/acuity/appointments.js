@@ -652,7 +652,7 @@ router.post('/update', async (req, res) => {
 // @acuity  PUT /appointments/:appID
 // @desc    Update Appointment data if changed for Dev2
 // @access  Admin
-router.get('/update/d2', async (req, res) => {
+router.post('/update/d2', async (req, res) => {
 	console.log('THIS IS THE NEW UPDATE ROUTE - DEV2');
 	console.log({body: req.body, headers: req.headers});
 
