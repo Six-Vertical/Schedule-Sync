@@ -563,8 +563,9 @@ router.post('/reschedule/d2', async (req, res) => {
 
 /////////////////////////////////////////////////////////// Updating \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-// @route   GET /accounts
-// @desc    Get all accounts
+// @route   POST /update
+// @acuity  PUT /appointments/:appID
+// @desc    Update Appointment data if changed
 // @access  Admin
 router.post('/update', async (req, res) => {
 	console.log('THIS IS THE NEW UPDATE ROUTE');
@@ -610,7 +611,7 @@ router.post('/update', async (req, res) => {
 						]
 					};
 
-					console.log({changedDataBody: apt});
+					console.log({changedDataBody: data});
 
 					const options = {
 						headers: {'Content-Type': 'application/json'},
@@ -633,6 +634,75 @@ router.post('/update', async (req, res) => {
 						}
 
 						console.log({after: 'After'});
+
+						res.json({success: true, body: z});
+					});
+				}
+			});
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({success: false, data: 'Server Error'});
+		}
+	} else {
+		res.status(200).json({success: true, message: 'Appointment not changed'});
+	}
+});
+
+// @route   POST /update/d2
+// @acuity  PUT /appointments/:appID
+// @desc    Update Appointment data if changed for Dev2
+// @access  Admin
+router.get('/update/d2', async (req, res) => {
+	console.log('THIS IS THE NEW UPDATE ROUTE - DEV2');
+	console.log({body: req.body, headers: req.headers});
+
+	if (req.body.action === 'changed') {
+		try {
+			acuityDev2.request(`/appointments/${req.body.id}`, {method: 'GET'}, (error, rez, apt) => {
+				if (error) {
+					console.log(error);
+					return res.status(400).json({success: false, message: `Could not get the appointment, please try again`});
+				}
+
+				const youngerSibID = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9678752).value;
+
+				if (youngerSibID === '') {
+					console.log(`No sibling to be changed`);
+
+					res.status(200).json({success: true, message: `No sibling to be changed.`});
+				} else {
+					const data = {
+						firstName: apt.firstName === '' ? '' : apt.firstName,
+						lastName: apt.lastName === '' ? '' : apt.lastName,
+						email: apt.email === '' ? '' : apt.email,
+						phone: apt.phone === '' ? '' : apt.phone,
+						fields: [
+							{
+								id: 9678748,
+								value: apt.id
+							}
+						]
+					};
+
+					console.log({changedDev2Body: data});
+
+					const options = {
+						headers: {'Content-Type': 'application/json'},
+						url: `https://acuityscheduling.com/api/v1/appointments/${youngerSibID}`,
+						auth: {
+							user: process.env.ACUITY_USER_ID_DEV_1,
+							password: process.env.ACUITY_API_KEY_DEV_1
+						},
+						body: JSON.stringify(data)
+					};
+
+					console.log({options});
+
+					requesting.put(options, (x, y, z) => {
+						if (x) {
+							console.log({error: x});
+							return res.status(400).json({success: false, x});
+						}
 
 						res.json({success: true, body: z});
 					});
