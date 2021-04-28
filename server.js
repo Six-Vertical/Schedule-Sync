@@ -6,12 +6,9 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const colors = require('colors');
-const getBlocks = require('./events/getBlocks');
 
 const app = express();
 connectDB();
-
-// getBlocks();
 
 app.use(cors());
 
@@ -24,14 +21,12 @@ app.use(express.json());
 
 app.use('/api/v1/acuity', require('./routes/acuity/acuity'));
 app.use('/api/v1/acuity/appointments', require('./routes/acuity/appointments'));
-app.use('/api/v1/acuity/blocks', require('./routes/acuity/blocks'));
 app.use('/api/v1/acuity/clients', require('./routes/acuity/clients'));
 
 app.use('/api/v1/ma/accounts', require('./routes/api/accounts'));
 app.use('/api/v1/ma/endpoints', require('./routes/api/endpoints'));
 app.use('/api/v1/ma/mapping', require('./routes/api/mapping'));
 app.use('/api/v1/ma/calendars', require('./routes/api/calendars'));
-app.use('/api/v1/ma/blocks', require('./routes/api/blocks'));
 
 if (process.env.NODE_ENV === 'production') {
 	app.use(express.static(path.join(__dirname, 'client', 'build')));
