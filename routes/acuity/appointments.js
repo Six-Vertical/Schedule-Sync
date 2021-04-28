@@ -664,7 +664,7 @@ router.post('/update/d2', async (req, res) => {
 					return res.status(400).json({success: false, message: `Could not get the appointment, please try again`});
 				}
 
-				const youngerSibID = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9678752).value;
+				const youngerSibID = apt.forms.find((form) => form.id === 1708418).values.find((val) => val.fieldID === 9678752).value;
 
 				if (youngerSibID === '') {
 					console.log(`No sibling to be changed`);
