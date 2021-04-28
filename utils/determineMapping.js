@@ -19,6 +19,7 @@ const determineMapping = async (aptTypeID) => {
 		switch (mapKey) {
 			case mapKey:
 				return {
+					...info,
 					type2: dev2Origin ? mapping.appointmentType1 : mapping.appointmentType2
 				};
 			default:
