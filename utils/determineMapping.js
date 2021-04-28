@@ -17,14 +17,8 @@ const determineMapping = async (aptTypeID) => {
 		console.log({apptTypeMapKey: mapKey});
 
 		switch (mapKey) {
-			case '607883220268d225705304c9':
+			case mapKey:
 				return {
-					...info,
-					type2: dev2Origin ? mapping.appointmentType1 : mapping.appointmentType2
-				};
-			case '607883bad4fddd6d4074cf90':
-				return {
-					...info,
 					type2: dev2Origin ? mapping.appointmentType1 : mapping.appointmentType2
 				};
 			default:

@@ -16,18 +16,6 @@ const determineCalMapping = async (calId) => {
 				return {
 					calType2: dev2Origin ? calendar.calendarId1 : calendar.calendarId2
 				};
-			// case '607731dc4d8ebe4b80b68640':
-			// 	return {
-			// 		calType2: dev2Origin ? calendar.calendarId1 : calendar.calendarId2
-			// 	};
-			// case '6077327c4d8ebe4b80b68642':
-			// 	return {
-			// 		calType2: dev2Origin ? calendar.calendarId1 : calendar.calendarId2
-			// 	};
-			// case '6077387c00bc061be016de97':
-			// 	return {
-			// 		calType2: dev2Origin ? calendar.calendarId1 : calendar.calendarId2
-			// 	};
 			default:
 				return 'default';
 		}
