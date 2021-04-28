@@ -579,6 +579,7 @@ router.post('/update', async (req, res) => {
 				}
 
 				const youngerSibID = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9678744).value;
+				const jobPlanField = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9700383).value;
 
 				if (youngerSibID === '') {
 					console.log(`No sibling to be changed`);
@@ -587,11 +588,22 @@ router.post('/update', async (req, res) => {
 				} else {
 					const data = {
 						firstName: apt.firstName === '' ? '' : apt.firstName,
-						firstName: apt.lastName === '' ? '' : apt.lastName,
-						email: apt.email === '' ? '' : apt.firstName
+						lastName: apt.lastName === '' ? '' : apt.lastName,
+						email: apt.email === '' ? '' : apt.email,
+						phone: apt.phone === '' ? '' : apt.phone,
+						fields: [
+							{
+								id: 9678751,
+								value: youngerSibID
+							},
+							{
+								id: 9700383,
+								value: jobPlanField
+							}
+						]
 					};
 
-					console.log({changedDataBody: data});
+					console.log({changedDataBody: apt});
 
 					const options = {
 						headers: {'Content-Type': 'application/json'},
@@ -600,14 +612,19 @@ router.post('/update', async (req, res) => {
 							user: process.env.ACUITY_USER_ID_DEV_2,
 							password: process.env.ACUITY_API_KEY_DEV_2
 						},
-						body: JSON.stringify(data)
+						body: JSON.stringify(apt)
 					};
 
+					console.log({options});
+
 					requesting.put(options, (x, y, z) => {
+						console.log({before: 'Before'});
 						if (x) {
 							console.log({error: x});
 							return res.status(400).json({success: false, x});
 						}
+
+						console.log({after: 'After'});
 
 						res.json({success: true, body: z});
 					});
