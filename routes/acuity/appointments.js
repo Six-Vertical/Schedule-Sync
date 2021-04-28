@@ -571,6 +571,7 @@ router.post('/update', async (req, res) => {
 	console.log({body: req.body, headers: req.headers});
 
 	try {
+		res.json({success: true, update: `${req.body.id} has been updated`});
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({success: false, data: 'Server Error'});
