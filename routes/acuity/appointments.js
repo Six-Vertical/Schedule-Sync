@@ -579,13 +579,14 @@ router.post('/update', async (req, res) => {
 				}
 
 				const youngerSibID = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9678744).value;
-				const jobPlanField = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9700383).value;
 
 				if (youngerSibID === '') {
 					console.log(`No sibling to be changed`);
 
 					res.status(200).json({success: true, message: `No sibling to be changed.`});
 				} else {
+					const formattedTime = apt.datetime.split('T')[1];
+
 					const data = {
 						firstName: apt.firstName === '' ? '' : apt.firstName,
 						lastName: apt.lastName === '' ? '' : apt.lastName,
@@ -598,7 +599,13 @@ router.post('/update', async (req, res) => {
 							},
 							{
 								id: 9700383,
-								value: jobPlanField
+								value: `
+								First Name: ${apt.firstName},
+								Last Name: ${apt.lastName},
+								Phone: ${apt.phone},
+								Appointment-Type Name: ${apt.type},
+								Start Time: ${formattedTime}
+							`
 							}
 						]
 					};
