@@ -585,7 +585,11 @@ router.post('/update', async (req, res) => {
 
 					res.status(200).json({success: true, message: `No sibling to be changed.`});
 				} else {
-					const data = apt;
+					const data = {
+						firstName: apt.firstName === '' ? '' : apt.firstName,
+						firstName: apt.lastName === '' ? '' : apt.lastName,
+						email: apt.email === '' ? '' : apt.firstName
+					};
 
 					console.log({changedDataBody: data});
 
