@@ -619,13 +619,14 @@ router.post('/update', async (req, res) => {
 							user: process.env.ACUITY_USER_ID_DEV_2,
 							password: process.env.ACUITY_API_KEY_DEV_2
 						},
-						body: JSON.stringify(apt)
+						body: JSON.stringify(data)
 					};
 
 					console.log({options});
 
 					requesting.put(options, (x, y, z) => {
 						console.log({before: 'Before'});
+						console.log({z});
 						if (x) {
 							console.log({error: x});
 							return res.status(400).json({success: false, x});
