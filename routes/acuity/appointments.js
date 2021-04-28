@@ -595,7 +595,7 @@ router.post('/update', async (req, res) => {
 						fields: [
 							{
 								id: 9678751,
-								value: youngerSibID
+								value: apt.id
 							},
 							{
 								id: 9700383,
