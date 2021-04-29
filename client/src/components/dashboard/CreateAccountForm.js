@@ -41,6 +41,7 @@ const CreateAccountForm = ({closeModal, createAnAccount, updateAccount, clearAcc
 				setTimeout(() => {
 					clearAccount();
 				}, 400);
+				getAccounts();
 			}
 		}
 	};

@@ -8,7 +8,7 @@
 }
 
 .list-group-item:hover {
-	background: #bbbaba;
+	background: #dadada;
 	transition: ease 0.13s all;
 }
 
@@ -56,7 +56,16 @@ a:hover {
 // 	}
 // }
 
-// @import 'tablet';
+#sidebar-wrapper {
+	width: 230px;
+	min-width: 180px;
+
+	.list-group li {
+		padding: 0.8rem;
+		font-size: 0.9rem;
+	}
+}
+
 @import 'smallerScreen';
 @import 'tablet';
 @import 'mobile';

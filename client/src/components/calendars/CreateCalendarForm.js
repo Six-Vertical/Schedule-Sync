@@ -91,6 +91,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 				setTimeout(() => {
 					clearCalendar();
 				}, 400);
+				getCalendars();
 			} else {
 				createCalendar(formData);
 				closeModal();
@@ -99,6 +100,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 				setTimeout(() => {
 					clearCalendar();
 				}, 400);
+				getCalendars();
 			}
 		}
 

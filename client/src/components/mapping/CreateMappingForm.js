@@ -53,6 +53,7 @@ const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMap
 				setTimeout(() => {
 					clearMapping();
 				}, 400);
+				getMappings();
 			} else {
 				createMapping(formData);
 				getMappings();
@@ -60,6 +61,7 @@ const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMap
 				setTimeout(() => {
 					clearMapping();
 				}, 400);
+				getMappings();
 			}
 		}
 	};

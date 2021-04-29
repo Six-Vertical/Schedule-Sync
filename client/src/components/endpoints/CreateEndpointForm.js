@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createEndpoint, clearEndpoint, getEndpoints, updateEndpoint} from '../../actions/endpoint';
 import {getAccounts} from '../../actions/account';
+import axios from 'axios';
 
 const CreateEndpointForm = ({closeModal, endpoint: {endpoint}, createEndpoint, getEndpoints, clearEndpoint, updateEndpoint, getAccounts, account: {accounts}}) => {
 	const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const CreateEndpointForm = ({closeModal, endpoint: {endpoint}, createEndpoint, g
 		userId: '',
 		apiKey: ''
 	});
+	const [validated, setValidated] = useState(false);
 
 	useEffect(() => {
 		if (endpoint !== null) {
@@ -42,6 +44,7 @@ const CreateEndpointForm = ({closeModal, endpoint: {endpoint}, createEndpoint, g
 				setTimeout(() => {
 					clearEndpoint();
 				}, 400);
+				getEndpoints();
 			} else {
 				createEndpoint(formData);
 				console.log({endpointForm: formData});
@@ -50,9 +53,29 @@ const CreateEndpointForm = ({closeModal, endpoint: {endpoint}, createEndpoint, g
 				setTimeout(() => {
 					clearEndpoint();
 				}, 400);
+				getEndpoints();
 			}
 		}
 	};
+
+	const validateCredentials = async (e) => {
+		e.preventDefault();
+
+		try {
+			const res = await axios.get(`/api/v1/acuity/calendars/${userId}/${apiKey}`);
+
+			if (res.data.cals.status_code === 401) {
+				alert(`Credentials not valid, please try again`);
+			} else {
+				setValidated(true);
+			}
+
+			console.log({theData: res});
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
 	return (
 		<Fragment>
 			<div className='modal-header'>
@@ -91,13 +114,19 @@ const CreateEndpointForm = ({closeModal, endpoint: {endpoint}, createEndpoint, g
 					</div>
 					<div className='form-group'>
 						<label htmlFor='userId'>User ID</label>
-						<input type='text' name='userId' className='form-control' onChange={onChange} value={userId} />
+						<input type='text' name='userId' className={`form-control ${validated && 'border border-success'}`} onChange={onChange} value={userId} />
 					</div>
 					<div className='form-group'>
 						<label htmlFor='apiKey'>API Key</label>
-						<input type='text' name='apiKey' className='form-control' onChange={onChange} value={apiKey} />
+						<input type='text' name='apiKey' className={`form-control ${validated && 'border border-success'}`} onChange={onChange} value={apiKey} />
 					</div>
-					<input type='submit' value='Save Endpoint' className='btn btn-primary btn-block' />
+					{validated ? (
+						<input style={{transition: 'all .3s ease'}} type='submit' className='btn btn-primary btn-block' />
+					) : (
+						<button style={{transition: 'all .3s ease'}} className='btn btn-dark btn-block' onClick={(e) => validateCredentials(e)} disabled={userId === '' || (apiKey === '' && true)}>
+							{userId === '' || apiKey === '' ? `Enter Credentials` : `Validate Credentials`}
+						</button>
+					)}
 				</form>
 				<button className='btn btn-secondary btn-block mt-2' onClick={() => closeModal()}>
 					Cancel
