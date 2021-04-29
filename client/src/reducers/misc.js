@@ -1,4 +1,4 @@
-import {MISC_ERROR, MISC_APPT_TYPES, MISC_GET_CALENDARS, MISC_CLEAR_ALL, MISC_LOADING} from '../actions/types';
+import {MISC_ERROR, MISC_APPT_TYPES, MISC_APPT_TYPES_2, MISC_GET_CALENDARS, MISC_GET_CALENDARS_2, MISC_CLEAR_ALL, MISC_LOADING} from '../actions/types';
 
 const inititalState = {
 	account1: null,
@@ -6,7 +6,9 @@ const inititalState = {
 	endpoint1: null,
 	endpoint2: null,
 	appointmentTypes: [],
+	appointmentTypes2: [],
 	calendars: [],
+	calendars2: [],
 	error: null,
 	loading: true
 };
@@ -24,12 +26,18 @@ function misc(state = inititalState, action) {
 		case MISC_LOADING:
 			return {
 				...state,
-				loading: false
+				loading: true
 			};
 		case MISC_GET_CALENDARS:
 			return {
 				...state,
 				calendars: payload,
+				loading: false
+			};
+		case MISC_GET_CALENDARS_2:
+			return {
+				...state,
+				calendars2: payload,
 				loading: false
 			};
 		case MISC_CLEAR_ALL:
@@ -40,7 +48,10 @@ function misc(state = inititalState, action) {
 				endpoint1: null,
 				endpoint2: null,
 				appointmentTypes: [],
-				calendars: []
+				appointmentTypes2: [],
+				calendars: [],
+				calendars2: [],
+				loading: true
 			};
 		case MISC_ERROR:
 			return {

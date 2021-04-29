@@ -4,9 +4,9 @@ import {connect} from 'react-redux';
 import {getCalendars, clearCalendar, updateCalendar, createCalendar} from '../../actions/calendar';
 import {getAccounts} from '../../actions/account';
 import {getEndpoints, getEndpoint, clearEndpoint} from '../../actions/endpoint';
-import {miscGetCalendars} from '../../actions/misc';
+import {miscGetCalendars, miscGetCalendars2, miscClearAll, isLoading} from '../../actions/misc';
 
-const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEndpoint, clearCalendar, getEndpoint, getCalendars, miscGetCalendars, getAccounts, getEndpoints, calendar: {calendar, calendars}, account: {accounts}, endpoint: {endpoints, endpoint}, misc}) => {
+const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEndpoint, clearCalendar, getEndpoint, getCalendars, miscGetCalendars, miscGetCalendars2, miscClearAll, isLoading, getAccounts, getEndpoints, calendar: {calendar, calendars}, account: {accounts}, endpoint: {endpoints, endpoint}, misc}) => {
 	const [formData, setFormData] = useState({
 		account1: '',
 		endpoint1: '',
@@ -57,13 +57,18 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 		setFormData({...formData, calendarName1: desiredCalendarName[0].name, timezone1: desiredCalendarName[0].timezone});
 
 		clearEndpoint();
+		isLoading();
 	};
 	const clearAll2 = () => {
-		const desiredCalendarName = misc.calendars.filter((cal) => cal.id === +calendarId2);
-		if (!desiredCalendarName) {
-			alert('Please try again');
+		const desiredCalendarName = misc.calendars2.filter((cal) => cal.id === +calendarId2);
+
+		if (calendarId1 === calendarId2) {
+			setFormData({...formData, endpoint2: '', calendarId2: '', calendarName2: '', timezone2: ''});
+			alert(`You cannot map the same configuration, please try again.`);
 		} else {
-			setFormData({...formData, calendarName2: desiredCalendarName[0].name, timezone2: desiredCalendarName[0].timezone});
+			setFormData({...formData, endpoint2: '', calendarName2: desiredCalendarName[0].name, timezone2: desiredCalendarName[0].timezone});
+			clearEndpoint();
+			isLoading();
 		}
 	};
 
@@ -81,6 +86,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 				updateCalendar(calendar._id, formData);
 				closeModal();
 				getCalendars();
+				miscClearAll();
 				setTimeout(() => {
 					clearCalendar();
 				}, 400);
@@ -88,6 +94,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 				createCalendar(formData);
 				closeModal();
 				getCalendars();
+				miscClearAll();
 				setTimeout(() => {
 					clearCalendar();
 				}, 400);
@@ -101,11 +108,16 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 		miscGetCalendars(endpoint.userId, endpoint.apiKey);
 	};
 
+	const fetchCalendarsInfo2 = () => {
+		miscGetCalendars2(endpoint.userId, endpoint.apiKey);
+	};
+
 	let calInUseFilter = calendars.map((item) => item.calendarId1);
 	let calInUseFilter2 = calendars.map((item) => item.calendarId2);
 	let calFilter = calInUseFilter.concat(calInUseFilter2);
 
 	let miscCalsFilter = misc.calendars.filter((miscCal) => !calFilter.includes(String(miscCal.id)));
+	let miscCalsFilter2 = misc.calendars2.filter((miscCal) => !calFilter.includes(String(miscCal.id)));
 
 	console.log({calFilter});
 	console.log({miscCalsFilter});
@@ -158,9 +170,13 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 							<div className='form-group'>
 								<label htmlFor='calendarId1'>Calendar 1</label>
 								<select disabled={endpoint1 === ''} name='calendarId1' onFocus={fetchCalendarsInfo} className='form-control' value={calendarId1} onChange={onChange} onBlur={clearAll1}>
-									<option value='Select Account Name'>Select Calendar Name</option>
+									<option value='Select Account Name' value=''>
+										Select Calendar Name
+									</option>
 									{misc.calendars.length === 0 || miscCalsFilter.length === 0 ? (
-										<option value='Not Available'>Not Available</option>
+										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
+											Not Available
+										</option>
 									) : (
 										miscCalsFilter.map((cal) => (
 											<option key={cal.id} value={cal.id}>
@@ -174,7 +190,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 						<div>
 							<div className='form-group'>
 								<label htmlFor='account2'>Account 2</label>
-								<select name='account2' value={account2} onChange={onChange} className='form-control' onFocus={getInfo}>
+								<select name='account2' disabled={calendarId1 === ''} value={account2} onChange={onChange} className='form-control' onFocus={getInfo}>
 									<option value='Select Account Name'>Select Account Name</option>
 									{accounts.length === 0 ? (
 										<option value='Not Available'>Not Available</option>
@@ -206,12 +222,14 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 							</div>
 							<div className='form-group'>
 								<label htmlFor='calendarId2'>Calendar 2</label>
-								<select disabled={endpoint2 === ''} name='calendarId2' value={calendarId2} onChange={onChange} className='form-control' onFocus={fetchCalendarsInfo} onBlur={clearAll2}>
+								<select disabled={endpoint2 === ''} name='calendarId2' value={calendarId2} onChange={onChange} className='form-control' onFocus={fetchCalendarsInfo2} onBlur={clearAll2}>
 									<option value='Select Calendar Name'>Select Calendar Name</option>
-									{misc.calendars.length === 0 || miscCalsFilter.length === 0 ? (
-										<option value='Not Available'>Not Available</option>
+									{misc.calendars2.length === 0 || miscCalsFilter.length === 0 ? (
+										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
+											Not Available
+										</option>
 									) : (
-										miscCalsFilter.map((cal) => (
+										miscCalsFilter2.map((cal) => (
 											<option key={cal.id} value={cal.id}>
 												{cal.name}
 											</option>
@@ -241,6 +259,9 @@ CreateCalendarForm.propTypes = {
 	getAccounts: PropTypes.func.isRequired,
 	getEndpoints: PropTypes.func.isRequired,
 	miscGetCalendars: PropTypes.func.isRequired,
+	miscGetCalendars2: PropTypes.func.isRequired,
+	isLoading: PropTypes.func.isRequired,
+	miscClearAll: PropTypes.func.isRequired,
 	getEndpoint: PropTypes.func.isRequired,
 	clearCalendar: PropTypes.func.isRequired,
 	clearEndpoint: PropTypes.func.isRequired,
@@ -255,4 +276,4 @@ const mapStateToProps = (state) => ({
 	misc: state.misc
 });
 
-export default connect(mapStateToProps, {getCalendars, updateCalendar, createCalendar, clearCalendar, clearEndpoint, getAccounts, getEndpoints, getEndpoint, miscGetCalendars})(CreateCalendarForm);
+export default connect(mapStateToProps, {getCalendars, updateCalendar, createCalendar, clearCalendar, clearEndpoint, getAccounts, getEndpoints, getEndpoint, miscGetCalendars, miscGetCalendars2, miscClearAll, isLoading})(CreateCalendarForm);

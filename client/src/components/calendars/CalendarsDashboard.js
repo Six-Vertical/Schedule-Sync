@@ -2,17 +2,21 @@ import React, {useRef, Fragment, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {getCalendars, clearCalendar} from '../../actions/calendar';
-import {clearEndpoint} from '../../actions/endpoint';
+import {clearEndpoint, getEndpoints} from '../../actions/endpoint';
 import ModalWrapper from '../layout/ModalWrapper';
 import CreateCalendarForm from './CreateCalendarForm';
 import Calendars from './Calendars';
 
-const CalendarsDashboard = ({calendar: {calendars, loading, error}, getCalendars, clearCalendar, clearEndpoint}) => {
+const CalendarsDashboard = ({calendar: {calendars, loading, error}, endpoint: {endpoints}, getCalendars, clearCalendar, clearEndpoint, getEndpoints}) => {
 	useEffect(() => {
 		if (calendars.length === 0) {
 			getCalendars();
 		}
-	}, [getCalendars, calendars.length, calendars]);
+
+		if (endpoints.length === 0) {
+			getEndpoints();
+		}
+	}, [getCalendars, getEndpoints, calendars.length, endpoints.length]);
 
 	const modalRef = useRef();
 
@@ -41,13 +45,16 @@ const CalendarsDashboard = ({calendar: {calendars, loading, error}, getCalendars
 
 CalendarsDashboard.propTypes = {
 	calendar: PropTypes.object.isRequired,
+	endpoint: PropTypes.object.isRequired,
 	getCalendars: PropTypes.func.isRequired,
 	clearCalendar: PropTypes.func.isRequired,
-	clearEndpoint: PropTypes.func.isRequired
+	clearEndpoint: PropTypes.func.isRequired,
+	getEndpoints: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
-	calendar: state.calendar
+	calendar: state.calendar,
+	endpoint: state.endpoint
 });
 
-export default connect(mapStateToProps, {getCalendars, clearCalendar, clearEndpoint})(CalendarsDashboard);
+export default connect(mapStateToProps, {getCalendars, clearCalendar, getEndpoints, clearEndpoint})(CalendarsDashboard);
