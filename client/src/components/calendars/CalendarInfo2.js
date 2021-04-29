@@ -17,7 +17,6 @@ const CalendarInfo = ({match, calendar: {calendars}}) => {
 
 	return (
 		<Fragment>
-			<h2 className='mb-4'>Calendar Mapping: Child Calendar Information</h2>
 			<Link to='/calendars' className='btn btn-dark my-3'>
 				Go Back
 			</Link>
@@ -25,14 +24,14 @@ const CalendarInfo = ({match, calendar: {calendars}}) => {
 				<p className='lead'>No calendars - please try again</p>
 			) : (
 				<ul className='list-group list-group-flush calendar-info-2'>
+					<li className='list-group-item mt-3'>
+						<strong>Calendar Name:</strong> <span className='ml-3'>{desiredCal.calendarName2}</span>
+					</li>
 					<li className='list-group-item'>
 						<strong>Account: </strong> <span className='ml-3'>{desiredCal.account2.name}</span>
 					</li>
 					<li className='list-group-item'>
 						<strong>Endpoint:</strong> <span className='ml-3'>{desiredCal.endpoint2.name}</span>
-					</li>
-					<li className='list-group-item mt-5'>
-						<strong>Calendar Name:</strong> <span className='ml-3'>{desiredCal.calendarName2}</span>
 					</li>
 					<li className='list-group-item'>
 						<strong>Calendar Id (External):</strong> <span className='ml-3'>{desiredCal.calendarId2}</span>
@@ -49,7 +48,7 @@ const CalendarInfo = ({match, calendar: {calendars}}) => {
 					<li className='list-group-item'>
 						<strong>Timezone:</strong> <span className='ml-3'>{desiredCal.timezone2}</span>
 					</li>
-					<li className='list-group-item mt-5'>
+					<li className='list-group-item'>
 						<strong>Description:</strong> <span className='ml-3'>Need Description Data</span>
 					</li>
 				</ul>
