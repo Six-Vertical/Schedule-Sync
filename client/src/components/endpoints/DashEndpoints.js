@@ -6,10 +6,9 @@ const DashEndpoints = ({endpoints, openModal, closeModal}) => {
 		<table className='table table-striped'>
 			<thead>
 				<tr>
-					<th scope='col'>Account</th>
-					<th scope='col'>Username</th>
+					<th scope='col'>Account Name</th>
 					<th scope='col'>Endpoint</th>
-					<th scope='col'>Endpoint ID</th>
+					<th scope='col'>Username</th>
 					<th scope='col'>API UserID</th>
 					<th scope='col'>API Key</th>
 					<th scope='col' className='bg-none'></th>

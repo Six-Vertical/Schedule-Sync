@@ -5,6 +5,7 @@ import {getCalendars, clearCalendar, updateCalendar, createCalendar} from '../..
 import {getAccounts} from '../../actions/account';
 import {getEndpoints, getEndpoint, clearEndpoint} from '../../actions/endpoint';
 import {miscGetCalendars, miscGetCalendars2, miscClearAll, isLoading} from '../../actions/misc';
+import Spinner from '../layout/Spinner';
 
 const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEndpoint, clearCalendar, getEndpoint, getCalendars, miscGetCalendars, miscGetCalendars2, miscClearAll, isLoading, getAccounts, getEndpoints, calendar: {calendar, calendars}, account: {accounts}, endpoint: {endpoints, endpoint}, misc}) => {
 	const [formData, setFormData] = useState({
@@ -66,7 +67,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 			setFormData({...formData, endpoint2: '', calendarId2: '', calendarName2: '', timezone2: ''});
 			alert(`You cannot map the same configuration, please try again.`);
 		} else {
-			setFormData({...formData, endpoint2: '', calendarName2: desiredCalendarName[0].name, timezone2: desiredCalendarName[0].timezone});
+			setFormData({...formData, calendarName2: desiredCalendarName[0].name, timezone2: desiredCalendarName[0].timezone});
 			clearEndpoint();
 			isLoading();
 		}

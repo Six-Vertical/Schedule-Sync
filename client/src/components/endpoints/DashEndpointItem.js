@@ -20,9 +20,8 @@ const DashEndpointItem = ({ep, openModal, getEndpoint, deleteEndpoint}) => {
 	return (
 		<tr>
 			<td>{ep.account.name}</td>
-			<td>{ep.username}</td>
 			<td>{ep.name}</td>
-			<td>{ep._id}</td>
+			<td>{ep.username}</td>
 			<td>{ep.userId}</td>
 			<td>{ep.apiKey}</td>
 			<td>
