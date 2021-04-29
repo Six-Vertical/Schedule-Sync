@@ -591,7 +591,7 @@ router.post('/update', async (req, res) => {
 					const data = {
 						firstName: apt.firstName === '' ? '' : apt.firstName,
 						lastName: apt.lastName === '' ? '' : apt.lastName,
-						email: apt.email === '' ? '' : apt.email,
+						email: apt.email === '' ? 'dev1@moveamerica.us' : apt.email,
 						phone: apt.phone === '' ? '' : apt.phone,
 						fields: [
 							{
@@ -674,7 +674,7 @@ router.post('/update/d2', async (req, res) => {
 					const data = {
 						firstName: apt.firstName === '' ? '' : apt.firstName,
 						lastName: apt.lastName === '' ? '' : apt.lastName,
-						email: apt.email === '' ? '' : apt.email,
+						email: apt.email === '' ? 'dev2@moveamerica.us' : apt.email,
 						phone: apt.phone === '' ? '' : apt.phone,
 						fields: [
 							{

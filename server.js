@@ -21,7 +21,6 @@ app.use(express.json());
 
 app.use('/api/v1/acuity', require('./routes/acuity/acuity'));
 app.use('/api/v1/acuity/appointments', require('./routes/acuity/appointments'));
-app.use('/api/v1/acuity/clients', require('./routes/acuity/clients'));
 
 app.use('/api/v1/ma/accounts', require('./routes/api/accounts'));
 app.use('/api/v1/ma/endpoints', require('./routes/api/endpoints'));
