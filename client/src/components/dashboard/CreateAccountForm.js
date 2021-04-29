@@ -33,6 +33,7 @@ const CreateAccountForm = ({closeModal, createAnAccount, updateAccount, clearAcc
 				setTimeout(() => {
 					clearAccount();
 				}, 400);
+				getAccounts();
 			} else {
 				createAnAccount(formData);
 				console.log(formData);
@@ -47,7 +48,7 @@ const CreateAccountForm = ({closeModal, createAnAccount, updateAccount, clearAcc
 	return (
 		<Fragment>
 			<div className='modal-header'>
-				<h5 className='modal-title'>New Account</h5>
+				<h5 className='modal-title'>{name === '' ? 'New' : 'Update'} Account</h5>
 				<button onClick={closeModal} type='button' className='close' data-dismiss='modal' aria-label='Close'>
 					<span aria-hidden='true'>&times;</span>
 				</button>
@@ -59,7 +60,7 @@ const CreateAccountForm = ({closeModal, createAnAccount, updateAccount, clearAcc
 						<label htmlFor='name'>Account Name</label>
 						<input autoFocus type='text' className='form-control' value={name} onChange={onChange} name='name' />
 					</div>
-					<input type='submit' className='btn btn-primary btn-block' value='Save Account' />
+					<input type='submit' className='btn btn-primary btn-block' value='Save' />
 				</form>
 				<button className='btn btn-secondary mt-2 btn-block' onClick={() => closeModal()}>
 					Cancel
