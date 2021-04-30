@@ -4,9 +4,9 @@ import {connect} from 'react-redux';
 import {getCalendars, clearCalendar, updateCalendar, createCalendar} from '../../actions/calendar';
 import {getAccounts} from '../../actions/account';
 import {getEndpoints, getEndpoint, clearEndpoint} from '../../actions/endpoint';
-import {miscGetCalendars, miscGetCalendars2, miscClearAll, isLoading} from '../../actions/misc';
+import {miscGetCalendars, miscGetCalendars2, miscClearAll, isLoading, miscClearCalendar1, miscClearCalendar2} from '../../actions/misc';
 
-const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEndpoint, clearCalendar, getEndpoint, getCalendars, miscGetCalendars, miscGetCalendars2, miscClearAll, isLoading, getAccounts, getEndpoints, calendar: {calendar, calendars}, account: {accounts}, endpoint: {endpoints, endpoint}, misc}) => {
+const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEndpoint, clearCalendar, getEndpoint, getCalendars, miscGetCalendars, miscGetCalendars2, miscClearAll, isLoading, miscClearCalendar1, miscClearCalendar2, getAccounts, getEndpoints, calendar: {calendar, calendars}, account: {accounts}, endpoint: {endpoints, endpoint}, misc}) => {
 	const [formData, setFormData] = useState({
 		account1: '',
 		endpoint1: '',
@@ -18,7 +18,8 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 		calendarName2: '',
 		calendarId2: '',
 		timezone2: '',
-		edit: false
+		edit1: false,
+		edit2: false
 	});
 
 	useEffect(() => {
@@ -34,7 +35,8 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 				calendarName2: calendar.calendarName2,
 				calendarId2: calendar.calendarId2,
 				timezone2: calendar.timezone2,
-				edit: true
+				edit1: true,
+				edit2: true
 			});
 		}
 	}, [setFormData, calendar]);
@@ -50,7 +52,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 		}
 	};
 
-	const {account1, endpoint1, calendarId1, account2, endpoint2, calendarId2} = formData;
+	const {edit1, edit2, account1, endpoint1, calendarId1, account2, endpoint2, calendarId2, calendarName1, calendarName2} = formData;
 
 	const clearAll1 = () => {
 		if (calendarId1 !== '') {
@@ -126,6 +128,19 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 		}
 	};
 
+	const focusEndpoint1 = () => {
+		clearEndpoint();
+		miscClearCalendar1();
+		getEndpoints();
+		setFormData({...formData, endpoint1: '', calendarName1: '', calendarId1: '', timezone1: '', edit1: false});
+	};
+	const focusEndpoint2 = () => {
+		clearEndpoint();
+		miscClearCalendar2();
+		getEndpoints();
+		setFormData({...formData, endpoint2: '', calendarName2: '', calendarId2: '', timezone2: '', edit2: false});
+	};
+
 	let calInUseFilter = calendars.map((item) => item.calendarId1);
 	let calInUseFilter2 = calendars.map((item) => item.calendarId2);
 	let calFilter = calInUseFilter.concat(calInUseFilter2);
@@ -137,7 +152,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 	console.log({miscCalsFilter});
 
 	const containsEndpoint = endpoints.filter((end) => end.account._id == account1);
-	console.log({containsEndpoint});
+	const containsEndpoint2 = endpoints.filter((end) => end.account._id == account2);
 
 	return (
 		<div className='create-calendar'>
@@ -169,7 +184,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 							</div>
 							<div className='form-group'>
 								<label htmlFor='endpoint1'>Endpoint 1</label>
-								<select name='endpoint1' disabled={account1 === ''} onFocus={getEndpoints} className='form-control' value={endpoint1} onChange={onChangeEndpoint}>
+								<select name='endpoint1' disabled={account1 === ''} onFocus={focusEndpoint1} className='form-control' value={endpoint1} onChange={onChangeEndpoint}>
 									<option value=''>Select Endpoint Name</option>
 									{endpoints.length === 0 || containsEndpoint.length === 0 ? (
 										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
@@ -188,8 +203,8 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 							</div>
 							<div className='form-group'>
 								<label htmlFor='calendarId1'>Calendar 1</label>
-								<select disabled={endpoint1 === ''} name='calendarId1' onFocus={fetchCalendarsInfo} className='form-control' value={calendarId1} onChange={onChange} onBlur={clearAll1}>
-									<option value=''>Select Calendar Name</option>
+								<select disabled={endpoint1 === '' || edit1} name='calendarId1' onFocus={fetchCalendarsInfo} className='form-control' value={calendarId1} onChange={onChange} onBlur={clearAll1}>
+									<option value=''>{edit1 ? calendarName1 : `Select Calendar Name`}</option>
 									{misc.calendars.length === 0 || miscCalsFilter.length === 0 ? (
 										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
 											Not Available
@@ -222,10 +237,12 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 							</div>
 							<div className='form-group'>
 								<label htmlFor='endpoint2'>Endpoint 2</label>
-								<select disabled={account2 === ''} name='endpoint2' value={endpoint2} onChange={onChangeEndpoint} className='form-control' onFocus={getEndpoints}>
-									<option value='Select Endpoint Name'>Select Endpoint Name</option>
-									{endpoints.length === 0 ? (
-										<option value='Not Available'>Not Available</option>
+								<select disabled={account2 === ''} name='endpoint2' value={endpoint2} onChange={onChangeEndpoint} className='form-control' onFocus={focusEndpoint2}>
+									<option value=''>Select Endpoint Name</option>
+									{endpoints.length === 0 || containsEndpoint2.length === 0 ? (
+										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
+											Not Available
+										</option>
 									) : (
 										endpoints
 											.filter((e) => e.account._id === account2)
@@ -239,8 +256,8 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 							</div>
 							<div className='form-group'>
 								<label htmlFor='calendarId2'>Calendar 2</label>
-								<select disabled={endpoint2 === ''} name='calendarId2' value={calendarId2} onChange={onChange} className='form-control' onFocus={fetchCalendarsInfo2} onBlur={clearAll2}>
-									<option value='Select Calendar Name'>Select Calendar Name</option>
+								<select disabled={endpoint2 === '' || edit2} name='calendarId2' value={calendarId2} onChange={onChange} className='form-control' onFocus={fetchCalendarsInfo2} onBlur={clearAll2}>
+									<option value=''>{edit2 ? calendarName2 : `Select Calendar Name`}</option>
 									{misc.calendars2.length === 0 || miscCalsFilter.length === 0 ? (
 										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
 											Not Available
@@ -283,7 +300,9 @@ CreateCalendarForm.propTypes = {
 	clearCalendar: PropTypes.func.isRequired,
 	clearEndpoint: PropTypes.func.isRequired,
 	createCalendar: PropTypes.func.isRequired,
-	updateCalendar: PropTypes.func.isRequired
+	updateCalendar: PropTypes.func.isRequired,
+	miscClearCalendar1: PropTypes.func.isRequired,
+	miscClearCalendar2: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -293,4 +312,4 @@ const mapStateToProps = (state) => ({
 	misc: state.misc
 });
 
-export default connect(mapStateToProps, {getCalendars, updateCalendar, createCalendar, clearCalendar, clearEndpoint, getAccounts, getEndpoints, getEndpoint, miscGetCalendars, miscGetCalendars2, miscClearAll, isLoading})(CreateCalendarForm);
+export default connect(mapStateToProps, {getCalendars, updateCalendar, createCalendar, clearCalendar, clearEndpoint, getAccounts, getEndpoints, getEndpoint, miscGetCalendars, miscGetCalendars2, miscClearAll, isLoading, miscClearCalendar1, miscClearCalendar2})(CreateCalendarForm);
