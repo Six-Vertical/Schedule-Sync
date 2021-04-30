@@ -1,4 +1,4 @@
-import {MISC_APPT_TYPES, MISC_APPT_TYPES_2, MISC_CLEAR_CALENDAR_1, MISC_CLEAR_CALENDAR_2, MISC_LOADING, MISC_GET_CALENDARS, MISC_GET_CALENDARS_2, MISC_ERROR, MISC_CLEAR_ALL} from './types';
+import {MISC_APPT_TYPES, MISC_APPT_TYPES_2, MISC_CLEAR_APPT_TYPES_1, MISC_CLEAR_APPT_TYPES_2, MISC_CLEAR_CALENDAR_1, MISC_CLEAR_CALENDAR_2, MISC_LOADING, MISC_GET_CALENDARS, MISC_GET_CALENDARS_2, MISC_ERROR, MISC_CLEAR_ALL} from './types';
 import axios from 'axios';
 
 export const miscGetApptTypes = (userId, apiKey) => async (dispatch) => {
@@ -90,5 +90,17 @@ export const miscClearCalendar1 = () => async (dispatch) => {
 export const miscClearCalendar2 = () => async (dispatch) => {
 	dispatch({
 		type: MISC_CLEAR_CALENDAR_2
+	});
+};
+
+export const miscClearApptType1 = () => async (dispatch) => {
+	dispatch({
+		type: MISC_CLEAR_APPT_TYPES_1
+	});
+};
+
+export const miscClearApptType2 = () => async (dispatch) => {
+	dispatch({
+		type: MISC_CLEAR_APPT_TYPES_2
 	});
 };

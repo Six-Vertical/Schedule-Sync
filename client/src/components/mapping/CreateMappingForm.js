@@ -4,9 +4,9 @@ import {connect} from 'react-redux';
 import {createMapping, updateMapping, clearMapping, getMappings} from '../../actions/mapping';
 import {getAccounts} from '../../actions/account';
 import {getEndpoints, getEndpoint, clearEndpoint} from '../../actions/endpoint';
-import {miscGetApptTypes, miscGetApptTypes2, miscClearAll, isLoading} from '../../actions/misc';
+import {miscGetApptTypes, miscGetApptTypes2, miscClearApptType1, miscClearApptType2, miscClearAll, isLoading} from '../../actions/misc';
 
-const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMapping, clearMapping, getMappings, closeModal, getAccounts, getEndpoints, miscGetApptTypes, miscGetApptTypes2, account: {accounts}, mapping: {mapping, mappings}, endpoint: {endpoints, endpoint}, misc: {loading, appointmentTypes, appointmentTypes2}}) => {
+const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType2, clearEndpoint, getEndpoint, updateMapping, clearMapping, getMappings, closeModal, getAccounts, getEndpoints, miscGetApptTypes, miscGetApptTypes2, account: {accounts}, mapping: {mapping, mappings}, endpoint: {endpoints, endpoint}, misc: {loading, appointmentTypes, appointmentTypes2}}) => {
 	const [formData, setFormData] = useState({
 		account1: '',
 		endpoint1: '',
@@ -16,7 +16,9 @@ const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMap
 		endpoint2: '',
 		appointmentType2: '',
 		appointmentTypeName2: '',
-		edit: false
+		edit: false,
+		edit1: false,
+		edit2: false
 	});
 
 	useEffect(() => {
@@ -30,7 +32,9 @@ const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMap
 				endpoint2: mapping.endpoint2._id,
 				appointmentType2: mapping.appointmentType2,
 				appointmentTypeName2: mapping.appointmentTypeName2,
-				edit: true
+				edit: true,
+				edit1: true,
+				edit2: true
 			});
 		}
 	}, [setFormData, mapping]);
@@ -39,7 +43,7 @@ const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMap
 		setFormData({...formData, [e.target.name]: e.target.value});
 	};
 
-	const {account1, endpoint1, appointmentType1, account2, endpoint2, appointmentType2} = formData;
+	const {account1, endpoint1, appointmentType1, account2, endpoint2, appointmentType2, appointmentTypeName1, appointmentTypeName2, edit1, edit2} = formData;
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -253,7 +257,9 @@ CreateMappingForm.propTypes = {
 	clearEndpoint: PropTypes.func.isRequired,
 	miscClearAll: PropTypes.func.isRequired,
 	miscGetApptTypes: PropTypes.func.isRequired,
-	miscGetApptTypes2: PropTypes.func.isRequired
+	miscGetApptTypes2: PropTypes.func.isRequired,
+	miscClearApptType1: PropTypes.func.isRequired,
+	miscClearApptType2: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -263,4 +269,4 @@ const mapStateToProps = (state) => ({
 	misc: state.misc
 });
 
-export default connect(mapStateToProps, {isLoading, createMapping, updateMapping, clearMapping, getMappings, getAccounts, getEndpoints, getEndpoint, clearEndpoint, miscClearAll, miscGetApptTypes, miscGetApptTypes2})(CreateMappingForm);
+export default connect(mapStateToProps, {isLoading, miscClearApptType1, miscClearApptType2, createMapping, updateMapping, clearMapping, getMappings, getAccounts, getEndpoints, getEndpoint, clearEndpoint, miscClearAll, miscGetApptTypes, miscGetApptTypes2})(CreateMappingForm);
