@@ -57,6 +57,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 	const clearAll1 = () => {
 		if (calendarId1 !== '') {
 			const desiredCalendarName = misc.calendars.filter((cal) => cal.id === +calendarId1);
+			console.log({desiredCalendarName});
 			if (desiredCalendarName.length > 0) {
 				setFormData({...formData, calendarName1: desiredCalendarName[0].name, timezone1: desiredCalendarName[0].timezone});
 
@@ -65,6 +66,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 			}
 		}
 	};
+
 	const clearAll2 = () => {
 		const desiredCalendarName = misc.calendars2.filter((cal) => cal.id === +calendarId2);
 

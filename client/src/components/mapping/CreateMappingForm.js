@@ -6,7 +6,7 @@ import {getAccounts} from '../../actions/account';
 import {getEndpoints, getEndpoint, clearEndpoint} from '../../actions/endpoint';
 import {miscGetApptTypes, miscGetApptTypes2, miscClearApptType1, miscClearApptType2, miscClearAll, isLoading} from '../../actions/misc';
 
-const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType2, clearEndpoint, getEndpoint, updateMapping, clearMapping, getMappings, closeModal, getAccounts, getEndpoints, miscGetApptTypes, miscGetApptTypes2, account: {accounts}, mapping: {mapping, mappings}, endpoint: {endpoints, endpoint}, misc: {loading, appointmentTypes, appointmentTypes2}}) => {
+const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType2, clearEndpoint, getEndpoint, updateMapping, clearMapping, getMappings, closeModal, getAccounts, getEndpoints, miscGetApptTypes, miscGetApptTypes2, account: {accounts}, mapping: {mapping, mappings}, endpoint: {endpoints, endpoint}, misc}) => {
 	const [formData, setFormData] = useState({
 		account1: '',
 		endpoint1: '',
@@ -16,7 +16,6 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 		endpoint2: '',
 		appointmentType2: '',
 		appointmentTypeName2: '',
-		edit: false,
 		edit1: false,
 		edit2: false
 	});
@@ -32,7 +31,6 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 				endpoint2: mapping.endpoint2._id,
 				appointmentType2: mapping.appointmentType2,
 				appointmentTypeName2: mapping.appointmentTypeName2,
-				edit: true,
 				edit1: true,
 				edit2: true
 			});
@@ -43,37 +41,74 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 		setFormData({...formData, [e.target.name]: e.target.value});
 	};
 
+	const onChangeEndpoint = (e) => {
+		setFormData({...formData, [e.target.name]: e.target.value});
+		if (endpoint === null) {
+			getEndpoint(e.target.value);
+		}
+	};
+
 	const {account1, endpoint1, appointmentType1, account2, endpoint2, appointmentType2, appointmentTypeName1, appointmentTypeName2, edit1, edit2} = formData;
+
+	const clearAll1 = () => {
+		if (appointmentType1 === '') {
+			const desiredAptType = misc.appointmentTypes.filter((apt) => apt.id === +appointmentType1);
+			if (desiredAptType.length > 0) {
+				setFormData({...formData, appointmentTypeName1: desiredAptType[0].name});
+
+				clearEndpoint();
+				isLoading();
+			}
+		}
+	};
+
+	const clearAll2 = () => {
+		const desiredAptType = misc.appointmentTypes2.filter((apt) => apt.id === +appointmentType2);
+
+		if (desiredAptType.length > 0) {
+			console.log({a2: desiredAptType});
+
+			if (appointmentType1 === appointmentType2) {
+				setFormData({...formData, endpoint2: '', appointmentType2: '', appointmentTypeName2: ''});
+				alert('You cannot map the same configuration, please try again.');
+			} else {
+				setFormData({...formData, appointmentTypeName2: desiredAptType[0].name});
+				clearEndpoint();
+				isLoading();
+			}
+		}
+	};
+
+	const getInfo = () => {
+		if (accounts.length === 0) {
+			getAccounts();
+		}
+	};
 
 	const onSubmit = (e) => {
 		e.preventDefault();
 		if (account1 === '' || endpoint1 === '' || appointmentType1 === '' || account2 === '' || endpoint2 === '' || appointmentType2 === '') {
 			alert('Please fill in all fields');
 		} else {
-			if (mapping !== null && formData.edit) {
+			if (mapping !== null) {
 				updateMapping(mapping._id, formData);
-				getMappings();
 				closeModal();
+				getMappings();
+				miscClearAll();
 				setTimeout(() => {
 					clearMapping();
 				}, 400);
 				getMappings();
 			} else {
 				createMapping(formData);
-				getMappings();
 				closeModal();
+				getMappings();
+				miscClearAll();
 				setTimeout(() => {
 					clearMapping();
 				}, 400);
 				getMappings();
 			}
-		}
-	};
-
-	const onChangeEndpoint = (e) => {
-		setFormData({...formData, [e.target.name]: e.target.value});
-		if (endpoint === null) {
-			getEndpoint(e.target.value);
 		}
 	};
 
@@ -93,35 +128,12 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 		}
 	};
 
-	const clearAll1 = () => {
-		const desiredAptType = appointmentTypes.filter((apt) => apt.id === +appointmentType1);
-		if (desiredAptType.length === 0) {
-			return false;
-		} else {
-			setFormData({...formData, appointmentTypeName1: desiredAptType[0].name});
-
-			clearEndpoint();
-		}
-	};
-	const clearAll2 = () => {
-		const desiredAptType = appointmentTypes2.filter((apt) => apt.id === +appointmentType2);
-		setFormData({...formData, appointmentTypeName2: desiredAptType[0].name});
-
-		clearEndpoint();
-	};
-
-	const getSecondInfo = () => {
-		if (accounts.length === 0) {
-			getAccounts();
-		}
-	};
-
 	let aptTypeInUse = mappings.map((item) => item.appointmentType1);
 	let aptTypeInUse2 = mappings.map((item) => item.appointmentType2);
 	let aptTypeFilter = aptTypeInUse.concat(aptTypeInUse2);
 
-	let miscAptTypeFilter = appointmentTypes.filter((miscAptType) => !aptTypeFilter.includes(String(miscAptType.id)));
-	let miscAptTypeFilter2 = appointmentTypes2.filter((miscAptType) => !aptTypeFilter.includes(String(miscAptType.id)));
+	let miscAptTypeFilter = misc.appointmentTypes.filter((miscAptType) => !aptTypeFilter.includes(String(miscAptType.id)));
+	let miscAptTypeFilter2 = misc.appointmentTypes2.filter((miscAptType) => !aptTypeFilter.includes(String(miscAptType.id)));
 
 	return (
 		<div className='create-mapping'>
@@ -172,7 +184,7 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 								<label htmlFor='appointmentType1'>Appointment-Type 1</label>
 								<select disabled={endpoint1 === ''} className='form-control' name='appointmentType1' value={appointmentType1} onFocus={fetchAppointmentTypesInfo} onChange={onChangeEndpoint} onBlur={clearAll1}>
 									<option value='Select Appointment-Type'>Select Appointment-Type</option>
-									{loading ? (
+									{misc.loading ? (
 										<option>Loading...</option>
 									) : (
 										miscAptTypeFilter.map((app) => (
@@ -188,7 +200,7 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 						<div>
 							<div className='form-group'>
 								<label htmlFor='account2'>Account 2</label>
-								<select name='account2' disabled={appointmentType1 === ''} onFocus={getSecondInfo} className='form-control' value={account2} onChange={onChange}>
+								<select name='account2' disabled={appointmentType1 === ''} onFocus={getInfo} className='form-control' value={account2} onChange={onChange}>
 									<option value='Select Account Name'>Select Account Name</option>
 									{accounts.length === 0 ? (
 										<option value='Not Available'>Not Available</option>
@@ -222,7 +234,7 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 								<label htmlFor='appointmentType2'>Appointment-Type 2</label>
 								<select disabled={endpoint2 === ''} className='form-control' name='appointmentType2' value={appointmentType2} onFocus={fetchAppointmentTypesInfo2} onChange={onChangeEndpoint} onBlur={clearAll2}>
 									<option value='Select Appointment-Type'>Select Appointment-Type</option>
-									{loading || appointmentTypes.length === 0 ? (
+									{misc.loading || misc.appointmentTypes.length === 0 ? (
 										<option>Loading...</option>
 									) : (
 										miscAptTypeFilter2.map((app) => (
