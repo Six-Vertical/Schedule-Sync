@@ -5,6 +5,7 @@ import ModalWrapper from '../layout/ModalWrapper';
 import CreateMappingForm from './CreateMappingForm';
 import {getMappings, clearMapping} from '../../actions/mapping';
 import {getEndpoints, clearEndpoint} from '../../actions/endpoint';
+import {miscClearAll} from '../../actions/misc';
 import DashMappings from './DashMappings';
 
 const MappingDashboard = ({clearMapping, clearEndpoint, getEndpoints, getMappings, mapping: {mappings, loading}, endpoint: {endpoints}}) => {
@@ -27,6 +28,7 @@ const MappingDashboard = ({clearMapping, clearEndpoint, getEndpoints, getMapping
 		modalRef.current.close();
 		clearMapping();
 		clearEndpoint();
+		miscClearAll();
 	};
 
 	return (

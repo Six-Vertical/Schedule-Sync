@@ -51,8 +51,9 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 	const {account1, endpoint1, appointmentType1, account2, endpoint2, appointmentType2, appointmentTypeName1, appointmentTypeName2, edit1, edit2} = formData;
 
 	const clearAll1 = () => {
-		if (appointmentType1 === '') {
+		if (appointmentType1 !== '') {
 			const desiredAptType = misc.appointmentTypes.filter((apt) => apt.id === +appointmentType1);
+			console.log({desiredAptType});
 			if (desiredAptType.length > 0) {
 				setFormData({...formData, appointmentTypeName1: desiredAptType[0].name});
 
@@ -86,7 +87,6 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 	};
 
 	const onSubmit = (e) => {
-		e.preventDefault();
 		if (account1 === '' || endpoint1 === '' || appointmentType1 === '' || account2 === '' || endpoint2 === '' || appointmentType2 === '') {
 			alert('Please fill in all fields');
 		} else {
@@ -110,22 +110,33 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 				getMappings();
 			}
 		}
+
+		e.preventDefault();
 	};
 
 	const fetchAppointmentTypesInfo = () => {
-		if (endpoint === null) {
-			return false;
-		} else {
+		if (endpoint !== null) {
 			miscGetApptTypes(endpoint.userId, endpoint.apiKey);
 		}
 	};
 
 	const fetchAppointmentTypesInfo2 = () => {
-		if (endpoint === null) {
-			return false;
-		} else {
+		if (endpoint !== null) {
 			miscGetApptTypes2(endpoint.userId, endpoint.apiKey);
 		}
+	};
+
+	const focusEndpoint = () => {
+		clearEndpoint();
+		miscClearApptType1();
+		getEndpoints();
+		setFormData({...formData, endpoint1: '', appointmentType1: '', appointmentTypeName1: '', edit1: false});
+	};
+	const focusEndpoint2 = () => {
+		clearEndpoint();
+		miscClearApptType2();
+		getEndpoints();
+		setFormData({...formData, endpoint2: '', appointmentType2: '', appointmentTypeName2: '', edit2: false});
 	};
 
 	let aptTypeInUse = mappings.map((item) => item.appointmentType1);
@@ -134,6 +145,12 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 
 	let miscAptTypeFilter = misc.appointmentTypes.filter((miscAptType) => !aptTypeFilter.includes(String(miscAptType.id)));
 	let miscAptTypeFilter2 = misc.appointmentTypes2.filter((miscAptType) => !aptTypeFilter.includes(String(miscAptType.id)));
+
+	console.log({aptTypeFilter});
+	console.log({miscAptTypeFilter});
+
+	const containsEndpoint = endpoints.filter((end) => end.account._id === account1);
+	const containsEndpoint2 = endpoints.filter((end) => end.account._id === account2);
 
 	return (
 		<div className='create-mapping'>
@@ -150,7 +167,7 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 						<div style={{marginRight: '2.2rem'}}>
 							<div className='form-group'>
 								<label htmlFor='account1'>Account 1</label>
-								<select name='account1' autoFocus onFocus={getAccounts} className='form-control' value={account1} onChange={onChange}>
+								<select name='account1' autoFocus onFocus={getInfo} className='form-control' value={account1} onChange={onChange}>
 									<option value='Select Account Name'>Select Accout Name</option>
 									{accounts.length === 0 ? (
 										<option value='Not Available'>Not Available</option>
@@ -165,10 +182,12 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 							</div>
 							<div className='form-group'>
 								<label htmlFor='endpoint1'>Endpoint 1</label>
-								<select disabled={account1 === ''} name='endpoint1' onFocus={getEndpoints} className='form-control' value={endpoint1} onChange={onChangeEndpoint}>
+								<select disabled={account1 === ''} name='endpoint1' onFocus={focusEndpoint} className='form-control' value={endpoint1} onChange={onChangeEndpoint}>
 									<option value='Select Endpoint'>Select Endpoint</option>
-									{endpoints.length === 0 ? (
-										<option value='Not Available'>Not Available</option>
+									{endpoints.length === 0 || containsEndpoint.length === 0 ? (
+										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
+											Not Available
+										</option>
 									) : (
 										endpoints
 											.filter((e) => e.account._id === account1)
@@ -182,10 +201,12 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 							</div>
 							<div className='form-group'>
 								<label htmlFor='appointmentType1'>Appointment-Type 1</label>
-								<select disabled={endpoint1 === ''} className='form-control' name='appointmentType1' value={appointmentType1} onFocus={fetchAppointmentTypesInfo} onChange={onChangeEndpoint} onBlur={clearAll1}>
-									<option value='Select Appointment-Type'>Select Appointment-Type</option>
-									{misc.loading ? (
-										<option>Loading...</option>
+								<select disabled={endpoint1 === '' || edit1} className='form-control' name='appointmentType1' value={appointmentType1} onFocus={fetchAppointmentTypesInfo} onChange={onChange} onBlur={clearAll1}>
+									<option value=''>{edit1 ? appointmentTypeName1 : `Select Appointment-Type`}</option>
+									{misc.appointmentTypes.length === 0 || aptTypeFilter.length === 0 ? (
+										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
+											Not Available
+										</option>
 									) : (
 										miscAptTypeFilter.map((app) => (
 											<option key={app.id} value={app.id}>
@@ -196,7 +217,6 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 								</select>
 							</div>
 						</div>
-
 						<div>
 							<div className='form-group'>
 								<label htmlFor='account2'>Account 2</label>
@@ -215,10 +235,12 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 							</div>
 							<div className='form-group'>
 								<label htmlFor='endpoint2'>Endpoint 2</label>
-								<select disabled={account2 === ''} name='endpoint2' onFocus={getEndpoints} className='form-control' value={endpoint2} onChange={onChangeEndpoint}>
-									<option value='Select Endpoint'>Select Endpoint</option>
-									{endpoints.length === 0 ? (
-										<option value='Not Available'>Not Available</option>
+								<select disabled={account2 === ''} name='endpoint2' onFocus={focusEndpoint2} className='form-control' value={endpoint2} onChange={onChangeEndpoint}>
+									<option value=''>Select Endpoint</option>
+									{endpoints.length === 0 || containsEndpoint2.length === 0 ? (
+										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
+											Not Available
+										</option>
 									) : (
 										endpoints
 											.filter((e) => e.account._id === account2)
@@ -232,10 +254,12 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 							</div>
 							<div className='form-group'>
 								<label htmlFor='appointmentType2'>Appointment-Type 2</label>
-								<select disabled={endpoint2 === ''} className='form-control' name='appointmentType2' value={appointmentType2} onFocus={fetchAppointmentTypesInfo2} onChange={onChangeEndpoint} onBlur={clearAll2}>
-									<option value='Select Appointment-Type'>Select Appointment-Type</option>
-									{misc.loading || misc.appointmentTypes.length === 0 ? (
-										<option>Loading...</option>
+								<select disabled={endpoint2 === '' || edit2} className='form-control' name='appointmentType2' value={appointmentType2} onFocus={fetchAppointmentTypesInfo2} onChange={onChange} onBlur={clearAll2}>
+									<option value=''>{edit2 ? appointmentTypeName2 : `Select Appointment-Type`}</option>
+									{misc.appointmentTypes2.length === 0 || miscAptTypeFilter2.length === 0 ? (
+										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
+											Not Available
+										</option>
 									) : (
 										miscAptTypeFilter2.map((app) => (
 											<option key={app.id} value={app.id}>

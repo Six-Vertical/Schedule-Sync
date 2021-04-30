@@ -153,8 +153,8 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 	console.log({calFilter});
 	console.log({miscCalsFilter});
 
-	const containsEndpoint = endpoints.filter((end) => end.account._id == account1);
-	const containsEndpoint2 = endpoints.filter((end) => end.account._id == account2);
+	const containsEndpoint = endpoints.filter((end) => end.account._id === account1);
+	const containsEndpoint2 = endpoints.filter((end) => end.account._id === account2);
 
 	return (
 		<div className='create-calendar'>
