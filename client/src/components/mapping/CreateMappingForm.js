@@ -4,9 +4,9 @@ import {connect} from 'react-redux';
 import {createMapping, updateMapping, clearMapping, getMappings} from '../../actions/mapping';
 import {getAccounts} from '../../actions/account';
 import {getEndpoints, getEndpoint, clearEndpoint} from '../../actions/endpoint';
-import {miscGetApptTypes, miscClearAll, isLoading} from '../../actions/misc';
+import {miscGetApptTypes, miscGetApptTypes2, miscClearAll, isLoading} from '../../actions/misc';
 
-const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMapping, clearMapping, getMappings, closeModal, getAccounts, getEndpoints, miscGetApptTypes, account: {accounts}, mapping: {mapping, mappings}, endpoint: {endpoints, endpoint}, misc: {loading, appointmentTypes}}) => {
+const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMapping, clearMapping, getMappings, closeModal, getAccounts, getEndpoints, miscGetApptTypes, miscGetApptTypes2, account: {accounts}, mapping: {mapping, mappings}, endpoint: {endpoints, endpoint}, misc: {loading, appointmentTypes, appointmentTypes2}}) => {
 	const [formData, setFormData] = useState({
 		account1: '',
 		endpoint1: '',
@@ -81,6 +81,14 @@ const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMap
 		}
 	};
 
+	const fetchAppointmentTypesInfo2 = () => {
+		if (endpoint === null) {
+			return false;
+		} else {
+			miscGetApptTypes2(endpoint.userId, endpoint.apiKey);
+		}
+	};
+
 	const clearAll1 = () => {
 		const desiredAptType = appointmentTypes.filter((apt) => apt.id === +appointmentType1);
 		if (desiredAptType.length === 0) {
@@ -92,7 +100,7 @@ const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMap
 		}
 	};
 	const clearAll2 = () => {
-		const desiredAptType = appointmentTypes.filter((apt) => apt.id === +appointmentType2);
+		const desiredAptType = appointmentTypes2.filter((apt) => apt.id === +appointmentType2);
 		setFormData({...formData, appointmentTypeName2: desiredAptType[0].name});
 
 		clearEndpoint();
@@ -109,6 +117,7 @@ const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMap
 	let aptTypeFilter = aptTypeInUse.concat(aptTypeInUse2);
 
 	let miscAptTypeFilter = appointmentTypes.filter((miscAptType) => !aptTypeFilter.includes(String(miscAptType.id)));
+	let miscAptTypeFilter2 = appointmentTypes2.filter((miscAptType) => !aptTypeFilter.includes(String(miscAptType.id)));
 
 	return (
 		<div className='create-mapping'>
@@ -175,7 +184,7 @@ const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMap
 						<div>
 							<div className='form-group'>
 								<label htmlFor='account2'>Account 2</label>
-								<select name='account2' onFocus={getSecondInfo} className='form-control' value={account2} onChange={onChange}>
+								<select name='account2' disabled={appointmentType1 === ''} onFocus={getSecondInfo} className='form-control' value={account2} onChange={onChange}>
 									<option value='Select Account Name'>Select Account Name</option>
 									{accounts.length === 0 ? (
 										<option value='Not Available'>Not Available</option>
@@ -207,12 +216,12 @@ const CreateMappingForm = ({createMapping, clearEndpoint, getEndpoint, updateMap
 							</div>
 							<div className='form-group'>
 								<label htmlFor='appointmentType2'>Appointment-Type 2</label>
-								<select disabled={endpoint2 === ''} className='form-control' name='appointmentType2' value={appointmentType2} onFocus={fetchAppointmentTypesInfo} onChange={onChangeEndpoint} onBlur={clearAll2}>
+								<select disabled={endpoint2 === ''} className='form-control' name='appointmentType2' value={appointmentType2} onFocus={fetchAppointmentTypesInfo2} onChange={onChangeEndpoint} onBlur={clearAll2}>
 									<option value='Select Appointment-Type'>Select Appointment-Type</option>
 									{loading || appointmentTypes.length === 0 ? (
 										<option>Loading...</option>
 									) : (
-										appointmentTypes.map((app) => (
+										miscAptTypeFilter2.map((app) => (
 											<option key={app.id} value={app.id}>
 												{app.name}
 											</option>
@@ -242,7 +251,9 @@ CreateMappingForm.propTypes = {
 	getEndpoints: PropTypes.func.isRequired,
 	closeModal: PropTypes.func.isRequired,
 	clearEndpoint: PropTypes.func.isRequired,
-	miscClearAll: PropTypes.func.isRequired
+	miscClearAll: PropTypes.func.isRequired,
+	miscGetApptTypes: PropTypes.func.isRequired,
+	miscGetApptTypes2: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -252,4 +263,4 @@ const mapStateToProps = (state) => ({
 	misc: state.misc
 });
 
-export default connect(mapStateToProps, {isLoading, createMapping, updateMapping, clearMapping, getMappings, getAccounts, getEndpoints, getEndpoint, clearEndpoint, miscClearAll, miscGetApptTypes})(CreateMappingForm);
+export default connect(mapStateToProps, {isLoading, createMapping, updateMapping, clearMapping, getMappings, getAccounts, getEndpoints, getEndpoint, clearEndpoint, miscClearAll, miscGetApptTypes, miscGetApptTypes2})(CreateMappingForm);

@@ -5,7 +5,6 @@ import {getCalendars, clearCalendar, updateCalendar, createCalendar} from '../..
 import {getAccounts} from '../../actions/account';
 import {getEndpoints, getEndpoint, clearEndpoint} from '../../actions/endpoint';
 import {miscGetCalendars, miscGetCalendars2, miscClearAll, isLoading} from '../../actions/misc';
-import Spinner from '../layout/Spinner';
 
 const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEndpoint, clearCalendar, getEndpoint, getCalendars, miscGetCalendars, miscGetCalendars2, miscClearAll, isLoading, getAccounts, getEndpoints, calendar: {calendar, calendars}, account: {accounts}, endpoint: {endpoints, endpoint}, misc}) => {
 	const [formData, setFormData] = useState({
@@ -54,22 +53,30 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 	const {account1, endpoint1, calendarId1, account2, endpoint2, calendarId2} = formData;
 
 	const clearAll1 = () => {
-		const desiredCalendarName = misc.calendars.filter((cal) => cal.id === +calendarId1);
-		setFormData({...formData, calendarName1: desiredCalendarName[0].name, timezone1: desiredCalendarName[0].timezone});
+		if (calendarId1 !== '') {
+			const desiredCalendarName = misc.calendars.filter((cal) => cal.id === +calendarId1);
+			if (desiredCalendarName.length > 0) {
+				setFormData({...formData, calendarName1: desiredCalendarName[0].name, timezone1: desiredCalendarName[0].timezone});
 
-		clearEndpoint();
-		isLoading();
+				clearEndpoint();
+				isLoading();
+			}
+		}
 	};
 	const clearAll2 = () => {
 		const desiredCalendarName = misc.calendars2.filter((cal) => cal.id === +calendarId2);
 
-		if (calendarId1 === calendarId2) {
-			setFormData({...formData, endpoint2: '', calendarId2: '', calendarName2: '', timezone2: ''});
-			alert(`You cannot map the same configuration, please try again.`);
-		} else {
-			setFormData({...formData, calendarName2: desiredCalendarName[0].name, timezone2: desiredCalendarName[0].timezone});
-			clearEndpoint();
-			isLoading();
+		if (desiredCalendarName.length > 0) {
+			console.log({d2: desiredCalendarName});
+
+			if (calendarId1 === calendarId2) {
+				setFormData({...formData, endpoint2: '', calendarId2: '', calendarName2: '', timezone2: ''});
+				alert(`You cannot map the same configuration, please try again.`);
+			} else {
+				setFormData({...formData, calendarName2: desiredCalendarName[0].name, timezone2: desiredCalendarName[0].timezone});
+				clearEndpoint();
+				isLoading();
+			}
 		}
 	};
 
@@ -108,11 +115,15 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 	};
 
 	const fetchCalendarsInfo = () => {
-		miscGetCalendars(endpoint.userId, endpoint.apiKey);
+		if (endpoint !== null) {
+			miscGetCalendars(endpoint.userId, endpoint.apiKey);
+		}
 	};
 
 	const fetchCalendarsInfo2 = () => {
-		miscGetCalendars2(endpoint.userId, endpoint.apiKey);
+		if (endpoint !== null) {
+			miscGetCalendars2(endpoint.userId, endpoint.apiKey);
+		}
 	};
 
 	let calInUseFilter = calendars.map((item) => item.calendarId1);
@@ -124,6 +135,9 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 
 	console.log({calFilter});
 	console.log({miscCalsFilter});
+
+	const containsEndpoint = endpoints.filter((end) => end.account._id == account1);
+	console.log({containsEndpoint});
 
 	return (
 		<div className='create-calendar'>
@@ -155,10 +169,12 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 							</div>
 							<div className='form-group'>
 								<label htmlFor='endpoint1'>Endpoint 1</label>
-								<select name='endpoint1' onFocus={getEndpoints} className='form-control' value={endpoint1} onChange={onChangeEndpoint}>
-									<option value='Select Endpoint Name'>Select Endpoint Name</option>
-									{endpoints.length === 0 ? (
-										<option value='Not Available'>Not Available</option>
+								<select name='endpoint1' disabled={account1 === ''} onFocus={getEndpoints} className='form-control' value={endpoint1} onChange={onChangeEndpoint}>
+									<option value=''>Select Endpoint Name</option>
+									{endpoints.length === 0 || containsEndpoint.length === 0 ? (
+										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
+											Not Available
+										</option>
 									) : (
 										endpoints
 											.filter((e) => e.account._id === account1)
@@ -173,9 +189,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 							<div className='form-group'>
 								<label htmlFor='calendarId1'>Calendar 1</label>
 								<select disabled={endpoint1 === ''} name='calendarId1' onFocus={fetchCalendarsInfo} className='form-control' value={calendarId1} onChange={onChange} onBlur={clearAll1}>
-									<option value='Select Account Name' value=''>
-										Select Calendar Name
-									</option>
+									<option value=''>Select Calendar Name</option>
 									{misc.calendars.length === 0 || miscCalsFilter.length === 0 ? (
 										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
 											Not Available
