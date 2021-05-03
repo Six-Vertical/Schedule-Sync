@@ -11,7 +11,7 @@ const Endpoint = require('../../models/Endpoint');
 // @access  Admin
 router.get('/', async (req, res) => {
 	try {
-		const accounts = await Account.find().sort({name: 1});
+		const accounts = await Account.find();
 
 		if (!accounts) {
 			return res.status(404).json({success: false, data: `No accounts could be found, please try again`});

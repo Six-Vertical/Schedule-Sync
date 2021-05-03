@@ -6,8 +6,6 @@ export const getAccounts = () => async (dispatch) => {
 		const res = await axios.get(`/api/v1/ma/accounts`);
 
 		console.log({getAccounts: res.data.accounts});
-		localStorage.setItem('account1', JSON.stringify(res.data.accounts));
-		localStorage.setItem('mainAcc', res.data.accounts.filter((acc) => acc.name === 'MoveAmerica')[0]._id);
 
 		dispatch({
 			type: GET_ACCOUNTS_SUCCESS,
