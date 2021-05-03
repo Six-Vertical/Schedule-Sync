@@ -20,7 +20,6 @@ const DashAccountItem = ({acc, getAccount, deleteAccount, closeModal, openModal}
 	return (
 		<tr>
 			<td>{acc.name}</td>
-			<td>{acc._id}</td>
 			<td>
 				<button className='btn btn-sm btn-outline-dark' title='Edit' onClick={updateAc}>
 					<i className='fas fa-edit'></i>

@@ -7,7 +7,6 @@ const DashAccounts = ({accounts, closeModal, openModal}) => {
 			<thead>
 				<tr>
 					<th scope='col'>Account</th>
-					<th scope='col'>Account ID</th>
 					<th scope='col' className='bg-none'></th>
 					<th scope='col' className='bg-none'></th>
 				</tr>
