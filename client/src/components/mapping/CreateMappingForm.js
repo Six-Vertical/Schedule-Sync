@@ -144,8 +144,9 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 	};
 
 	let aptTypeInUse = mappings.map((item) => item.appointmentType1);
-	let aptTypeInUse2 = mappings.map((item) => item.appointmentType2);
-	let aptTypeFilter = aptTypeInUse.concat(aptTypeInUse2);
+	// let aptTypeInUse2 = mappings.map((item) => item.appointmentType2);
+	// let aptTypeFilter = aptTypeInUse.concat(aptTypeInUse2);
+	let aptTypeFilter = aptTypeInUse;
 
 	let miscAptTypeFilter = misc.appointmentTypes.filter((miscAptType) => !aptTypeFilter.includes(String(miscAptType.id)));
 	let miscAptTypeFilter2 = misc.appointmentTypes2.filter((miscAptType) => !aptTypeFilter.includes(String(miscAptType.id)));

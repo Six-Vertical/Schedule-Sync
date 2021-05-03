@@ -9,7 +9,7 @@ const Endpoint = require('../../models/Endpoint');
 // @access  Admin
 router.get('/', async (req, res) => {
 	try {
-		const endpoints = await Endpoint.find().populate({path: 'account', select: 'name'});
+		const endpoints = await Endpoint.find().populate({path: 'account', select: 'name'}).sort('-account');
 
 		if (!endpoints) {
 			return res.status(404).json({success: false, endpoints: 'Endpoints could not be found, please try again'});

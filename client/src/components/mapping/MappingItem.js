@@ -34,7 +34,7 @@ const MappingItem = ({ma, openModal, closeModal, getMapping, deleteMapping}) => 
 				<br />({ma.appointmentType1})
 			</td>
 			<td>
-				<i className='fas fa-arrows-alt-h'></i>
+				<i className='fas fa-long-arrow-alt-right'></i>
 			</td>
 			<td>{ma.account2.name}</td>
 			<td>{ma.endpoint2.name}</td>
