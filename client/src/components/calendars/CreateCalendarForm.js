@@ -47,7 +47,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 
 	const onChangeEndpoint = (e) => {
 		setFormData({...formData, [e.target.name]: e.target.value});
-		if (endpoint === null) {
+		if (endpoint === null || endpoint1 !== '' || endpoint2 !== '') {
 			getEndpoint(e.target.value);
 		}
 	};
@@ -134,9 +134,13 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 		clearEndpoint();
 		miscClearCalendar1();
 		getEndpoints();
-		setFormData({...formData, endpoint1: '', calendarName1: '', calendarId1: '', timezone1: '', edit1: false});
+		setFormData({...formData, endpoint1: '', calendarName1: '', calendarId1: '', timezone1: '', edit1: false, edit2: false, account2: '', endpoint2: '', calendarId2: '', calendarName2: '', timezone2: ''});
 	};
 	const focusEndpoint2 = () => {
+		if (endpoint2 !== '') {
+			setFormData({...formData, endpoint2: ''});
+		}
+
 		clearEndpoint();
 		miscClearCalendar2();
 		getEndpoints();
@@ -205,7 +209,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 							</div>
 							<div className='form-group'>
 								<label htmlFor='calendarId1'>Calendar 1</label>
-								<select disabled={endpoint1 === '' || edit1} name='calendarId1' onFocus={fetchCalendarsInfo} className='form-control' value={calendarId1} onChange={onChange} onBlur={clearAll1}>
+								<select disabled={endpoint1 === '' || edit1 || endpoint2 !== ''} name='calendarId1' onFocus={fetchCalendarsInfo} className='form-control' value={calendarId1} onChange={onChange} onBlur={clearAll1}>
 									<option value=''>{edit1 ? calendarName1 : `Select Calendar Name`}</option>
 									{misc.calendars.length === 0 || miscCalsFilter.length === 0 ? (
 										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
@@ -260,7 +264,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 								<label htmlFor='calendarId2'>Calendar 2</label>
 								<select disabled={endpoint2 === '' || edit2} name='calendarId2' value={calendarId2} onChange={onChange} className='form-control' onFocus={fetchCalendarsInfo2} onBlur={clearAll2}>
 									<option value=''>{edit2 ? calendarName2 : `Select Calendar Name`}</option>
-									{misc.calendars2.length === 0 || miscCalsFilter.length === 0 ? (
+									{misc.calendars2.length === 0 ? (
 										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
 											Not Available
 										</option>
