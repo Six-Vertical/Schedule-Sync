@@ -121,9 +121,9 @@ const CreateEndpointForm = ({closeModal, endpoint: {endpoint}, createEndpoint, g
 						<input type='text' name='apiKey' className={`form-control ${validated && 'border border-success'}`} onChange={onChange} value={apiKey} />
 					</div>
 					{validated ? (
-						<input style={{transition: 'all .3s ease'}} type='submit' className='btn btn-primary' />
+						<input style={{transition: 'all .3s ease'}} type='submit' className='btn btn-primary mt-2' value='Save Endpoint' />
 					) : (
-						<button style={{transition: 'all .3s ease'}} className='btn btn-dark' onClick={(e) => validateCredentials(e)} disabled={userId === '' || (apiKey === '' && true)}>
+						<button style={{transition: 'all .3s ease'}} className='btn btn-dark mt-2' onClick={(e) => validateCredentials(e)} disabled={userId === '' || (apiKey === '' && true)}>
 							{userId === '' || apiKey === '' ? `Enter Credentials` : `Validate Credentials`}
 						</button>
 					)}

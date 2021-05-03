@@ -61,7 +61,7 @@ const CreateAccountForm = ({closeModal, createAnAccount, updateAccount, clearAcc
 						<label htmlFor='name'>Account Name</label>
 						<input autoFocus type='text' className='form-control' value={name} onChange={onChange} name='name' />
 					</div>
-					<input type='submit' className='btn btn-primary' value='Save' />
+					<input type='submit' className='btn btn-primary' value='Save Account' />
 				</form>
 				<button className='btn btn-secondary mt-2' onClick={() => closeModal()}>
 					Cancel

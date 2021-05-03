@@ -277,9 +277,9 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 						</div>
 					</div>
 
-					<input type='submit' value='Save Endpoint' className='btn btn-primary btn-block' />
+					<input type='submit' value='Save Appointment-Type Mapping' className='btn btn-primary mt-2' />
 				</form>
-				<button className='btn btn-light btn-block mt-3' onClick={closeModal}>
+				<button className='btn btn-dark mt-2' onClick={closeModal}>
 					Cancel
 				</button>
 			</div>

@@ -1,6 +1,7 @@
 .modal {
 	.btn {
-		width: 200px;
+		// width: 250px;
+		padding: 0.5rem 1rem;
 	}
 }
 
@@ -24,6 +25,10 @@ a:hover {
 
 .modal {
 	background: rgba(0, 0, 0, 0.7);
+
+	.border-success {
+		border-width: 2px !important;
+	}
 }
 
 .modal-dialog {
