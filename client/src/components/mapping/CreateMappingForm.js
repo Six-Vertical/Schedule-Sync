@@ -213,7 +213,7 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 											Not Available
 										</option>
 									) : (
-										miscAptTypeFilter.map((app) => (
+										misc.appointmentTypes.map((app) => (
 											<option key={app.id} value={app.id}>
 												{app.name}
 											</option>
@@ -266,7 +266,7 @@ const CreateMappingForm = ({createMapping, miscClearApptType1, miscClearApptType
 											Not Available
 										</option>
 									) : (
-										miscAptTypeFilter2.map((app) => (
+										misc.appointmentTypes2.map((app) => (
 											<option key={app.id} value={app.id}>
 												{app.name}
 											</option>
