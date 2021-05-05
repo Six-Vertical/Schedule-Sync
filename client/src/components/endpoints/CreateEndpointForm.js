@@ -104,13 +104,13 @@ const CreateEndpointForm = ({closeModal, endpoint: {endpoint}, createEndpoint, g
 					</div>
 					<div className='form-group'>
 						<label htmlFor='name'>Endpoint Name</label>
-						<input type='text' name='name' className='form-control' onChange={onChange} value={name} />
+						<input title='name' type='text' name='name' className='form-control' onChange={onChange} value={name} />
 					</div>
 					<hr />
 					<br />
 					<div className='form-group'>
 						<label htmlFor='username'>Username</label>
-						<input type='text' onChange={onChange} name='username' className='form-control' value={username} />
+						<input title='username' type='text' onChange={onChange} name='username' className='form-control' value={username} />
 					</div>
 					<div className='form-group'>
 						<label htmlFor='userId'>User ID</label>
