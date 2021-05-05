@@ -104,8 +104,8 @@ router.post(`/create`, async (req, res) => {
 							email: apt.email,
 							appointmentTypeID: mappingKey.type2,
 							calendarID: calMappingKey.calType2,
-							// datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T12:00:00-0700`,
-							datetime: apt.datetime,
+							datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T12:00:00-0700`,
+							// datetime: apt.datetime,
 							notes: `This sibling appointment was created automatically with Schedule-Sync`,
 							fields: [
 								{
@@ -245,8 +245,8 @@ router.post(`/create/d2`, async (req, res) => {
 							email: apt.email,
 							appointmentTypeID: mappingKey.type2,
 							calendarID: calMappingKey.calType2,
-							// datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T13:00:00-0700`,
-							datetime: apt.datetime,
+							datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T13:00:00-0700`,
+							// datetime: apt.datetime,
 							notes: `This sibling appointment was created automatically with Schedule-Sync`,
 							fields: [
 								{
@@ -462,8 +462,8 @@ router.post('/reschedule', async (req, res) => {
 				const formattedDate = apt.datetime.split('T')[0];
 
 				const data = {
-					// datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T12:00:00-0700`,
-					datetime: apt.datetime,
+					datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T12:00:00-0700`,
+					// datetime: apt.datetime,
 					calendarID: calMappingKey.calType2
 				};
 
@@ -528,8 +528,8 @@ router.post('/reschedule/d2', async (req, res) => {
 				const formattedDate = apt.datetime.split('T')[0];
 
 				const data = {
-					// datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T13:00:00-0700`,
-					datetime: apt.datetime,
+					datetime: formattedTime == '09:00:00-0700' ? `${formattedDate}T09:00:00-0700` : `${formattedDate}T13:00:00-0700`,
+					// datetime: apt.datetime,
 					calendarID: calMappingKey.calType2
 				};
 
