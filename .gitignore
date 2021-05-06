@@ -5,3 +5,5 @@ config/config.env
 
 client/build
 client/node_modules/
+
+test/

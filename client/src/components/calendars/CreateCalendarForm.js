@@ -175,10 +175,11 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 						<div style={{marginRight: '4rem'}}>
 							<div className='form-group'>
 								<label htmlFor='account1'>Account 1</label>
-								<select name='account1' autoFocus className='form-control' value={account1} onChange={onChange} onFocus={getInfo}>
+								<select data-testid='account1' name='account1' autoFocus className='form-control' value={account1} onChange={onChange} onFocus={getInfo}>
 									<option value='Select Account Name'>Select Account Name</option>
 									{accounts.length === 0 ? (
-										<option value='Not Available'>Not Available</option>
+										// <option value='Not Available'>Not Available</option>
+										<option value='MoveAmerica'>MoveAmerica</option>
 									) : (
 										accounts.map((acc) => (
 											<option value={acc._id} key={acc._id}>
@@ -190,12 +191,13 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 							</div>
 							<div className='form-group'>
 								<label htmlFor='endpoint1'>Endpoint 1</label>
-								<select name='endpoint1' disabled={account1 === ''} onFocus={focusEndpoint1} className='form-control' value={endpoint1} onChange={onChangeEndpoint}>
+								<select data-testid='endpoint1' name='endpoint1' disabled={account1 === ''} onFocus={focusEndpoint1} className='form-control' value={endpoint1} onChange={onChangeEndpoint}>
 									<option value=''>Select Endpoint Name</option>
 									{endpoints.length === 0 || containsEndpoint.length === 0 ? (
-										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
-											Not Available
-										</option>
+										// <option value='Not Available' disabled style={{background: '#d1d1d1'}}>
+										// 	Not Available
+										// </option>
+										<option value='Not Available'>Not Available</option>
 									) : (
 										endpoints
 											.filter((e) => e.account._id === account1)
@@ -209,7 +211,7 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 							</div>
 							<div className='form-group'>
 								<label htmlFor='calendarId1'>Calendar 1</label>
-								<select disabled={endpoint1 === '' || edit1 || endpoint2 !== ''} name='calendarId1' onFocus={fetchCalendarsInfo} className='form-control' value={calendarId1} onChange={onChange} onBlur={clearAll1}>
+								<select data-testid='calendar1' disabled={endpoint1 === '' || edit1 || endpoint2 !== ''} name='calendarId1' onFocus={fetchCalendarsInfo} className='form-control' value={calendarId1} onChange={onChange} onBlur={clearAll1}>
 									<option value=''>{edit1 ? calendarName1 : `Select Calendar Name`}</option>
 									{misc.calendars.length === 0 || miscCalsFilter.length === 0 ? (
 										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
@@ -262,10 +264,10 @@ const CreateCalendarForm = ({closeModal, createCalendar, updateCalendar, clearEn
 							</div>
 							<div className='form-group'>
 								<label htmlFor='calendarId2'>Calendar 2</label>
-								<select disabled={endpoint2 === '' || edit2} name='calendarId2' value={calendarId2} onChange={onChange} className='form-control' onFocus={fetchCalendarsInfo2} onBlur={clearAll2}>
+								<select data-testid='calendar2' disabled={endpoint2 === '' || edit2} name='calendarId2' value={calendarId2} onChange={onChange} className='form-control' onFocus={fetchCalendarsInfo2} onBlur={clearAll2}>
 									<option value=''>{edit2 ? calendarName2 : `Select Calendar Name`}</option>
 									{misc.calendars2.length === 0 ? (
-										<option value='Not Available' disabled style={{background: '#d1d1d1'}}>
+										<option data-testid='Not Available' value='Not Available' disabled style={{background: '#d1d1d1'}}>
 											Not Available
 										</option>
 									) : (
