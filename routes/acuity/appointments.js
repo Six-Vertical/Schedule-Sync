@@ -586,9 +586,27 @@ router.post('/update', async (req, res) => {
 				const youngerSibID = apt.forms.find((form) => form.id === 1701777).values.find((val) => val.fieldID === 9678744).value;
 
 				if (youngerSibID === '') {
-					console.log(`No sibling to be changed`);
+					const optionsCreate = {
+						headers: {'Content-Type': 'application/json'},
+						url: `/api/v1/acuity/create/d2`,
+						auth: {
+							user: process.env.ACUITY_USER_ID_DEV_2,
+							password: process.env.ACUITY_API_KEY_DEV_2
+						},
+						body: JSON.stringify({action: 'scheduled', id: apt.id, calendarID: apt.calendarID, appointmentTypeID: apt.appointmentTypeID})
+					};
 
-					res.status(200).json({success: true, message: `No sibling to be changed.`});
+					requesting.post(optionsCreate, (mno) => {
+						if (m) {
+							console.log({m});
+
+							return res.json({success: false, error: m});
+						}
+					});
+
+					// console.log(`No sibling to be changed`);
+
+					// res.status(200).json({success: true, message: `No sibling to be changed.`});
 				} else {
 					const formattedTime = apt.datetime.split('T')[1];
 
