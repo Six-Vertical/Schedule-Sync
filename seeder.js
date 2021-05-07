@@ -13,6 +13,7 @@ const deleteData = async () => {
 		console.log(`Data Deleted`);
 	} catch (err) {
 		console.error(err);
+		console.log(`It didnt work...`);
 	}
 };
 
